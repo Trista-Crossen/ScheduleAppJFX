@@ -5,11 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.dao.AppointmentDao;
 import sample.dao.DBConnection;
 
 import java.sql.SQLException;
 
-import static sample.dao.CustomerDaoImpl.*;
 
 public class Main extends Application {
 
@@ -25,7 +25,7 @@ public class Main extends Application {
     public static void main(String[] args) throws SQLException {
         DBConnection.openConnection();
         launch(args);
-        //CustomerDaoImpl.addCustomer("Nicole Crossen", "3250 A Lillian Cv", "72034", "501-305-8127", 3);
+
         DBConnection.closeConnection();
     }
 }
