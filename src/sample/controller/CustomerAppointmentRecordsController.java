@@ -1,6 +1,7 @@
 package sample.controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -12,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.dao.CustomerDao;
 import sample.dao.DBConnection;
+import sample.helper.AppointmentDaoImpl;
 import sample.helper.CustomerDaoImpl;
 import sample.model.Appointment;
 import sample.model.Customer;
@@ -59,6 +61,25 @@ public class CustomerAppointmentRecordsController implements Initializable {
         //Calls method to populate customer table view
         try {
             allCustomersView.setItems(CustomerDaoImpl.getAllCustomers());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        //Sets up columns for Appointment Table View
+        appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        contactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        startCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        endCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        customerIdARCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
+        //Calls method to populate appointment table view
+        try {
+            allAppointmentsView.setItems(AppointmentDaoImpl.getAllAppointments());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

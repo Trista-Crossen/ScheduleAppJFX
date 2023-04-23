@@ -11,8 +11,6 @@ public class CustomerDaoImpl {
     private static ObservableList<Customer> customers = FXCollections.observableArrayList();
 
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
-        CustomerDao.selectCustomers();
-
         return customers;
     }
 }

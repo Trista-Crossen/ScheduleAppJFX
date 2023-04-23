@@ -11,8 +11,6 @@ public class AppointmentDaoImpl {
     private static ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
-        AppointmentDao.selectAppointments();
-
         return appointments;
     }
 }

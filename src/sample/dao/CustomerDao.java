@@ -1,8 +1,5 @@
 package sample.dao;
 
-import javafx.collections.ObservableList;
-import sample.model.Customer;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
