@@ -27,7 +27,7 @@ public class Main extends Application {
         DBConnection.openConnection();
         launch(args);
 
-        CountryDao.selectCounties();
+
 
         DBConnection.closeConnection();
     }
