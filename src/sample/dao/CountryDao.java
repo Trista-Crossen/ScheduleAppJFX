@@ -3,10 +3,21 @@ package sample.dao;
 import javafx.collections.ObservableList;
 import sample.model.Country;
 
-public abstract class CountryDao {
-    private static ObservableList<Country> countries;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-    public static ObservableList<Country> getCountries() {
-        return countries;
+public abstract class CountryDao {
+    public static void selectCounties() throws SQLException {
+        String sql = "SELECT Country_ID, Country FROM client_schedule.countries;";
+        PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery(sql);
+
+        while(rs.next()) {
+            int countryID = rs.getInt("Country_ID");
+            String countryName = rs.getString("Country");
+
+            System.out.println(countryID + " | " + countryName);
+        }
     }
 }

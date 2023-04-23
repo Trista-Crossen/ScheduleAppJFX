@@ -3,10 +3,22 @@ package sample.dao;
 import javafx.collections.ObservableList;
 import sample.model.FirstLevelDivision;
 
-public abstract class FirstLevelDivisionDao {
-    private static ObservableList<FirstLevelDivision> firstLevelDivisions;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-    public static ObservableList<FirstLevelDivision> getFirstLevelDivisionsForCountry(){
-        return firstLevelDivisions;
-    }
+public abstract class FirstLevelDivisionDao {
+    /*public static void selectFirstLevelDivision(int countryId) throws SQLException {
+        String sql = "SELECT Division_ID, Division FROM client_schedule.first_level_divisions WHERE Country_ID = ? ";
+        PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
+        ps.setInt(1, countryId);
+        ResultSet rs = ps.executeQuery(sql);
+
+        while(rs.next()) {
+            int divisionId = rs.getInt("Division_ID");
+            String divisionName = rs.getString("Division");
+
+            System.out.println(divisionId + " | " + divisionName);
+        }
+    }*/
 }

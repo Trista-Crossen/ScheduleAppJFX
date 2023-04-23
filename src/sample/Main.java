@@ -5,10 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.dao.AppointmentDao;
-import sample.dao.DBConnection;
+import sample.dao.*;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 
 public class Main extends Application {
@@ -26,7 +27,7 @@ public class Main extends Application {
         DBConnection.openConnection();
         launch(args);
 
-
+        CountryDao.selectCounties();
 
         DBConnection.closeConnection();
     }
