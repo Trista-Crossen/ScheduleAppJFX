@@ -1,7 +1,6 @@
 package sample.controller;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -13,15 +12,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
-import sample.dao.DBConnection;
-import sample.helper.AppointmentDaoImpl;
-import sample.helper.CustomerDaoImpl;
 import sample.model.Appointment;
 import sample.model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
