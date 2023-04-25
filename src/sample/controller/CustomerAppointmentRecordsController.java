@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
 import sample.dao.DBConnection;
 import sample.helper.AppointmentDaoImpl;
@@ -59,11 +60,8 @@ public class CustomerAppointmentRecordsController implements Initializable {
         phoneCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
 
         //Calls method to populate customer table view
-        try {
-            allCustomersView.setItems(CustomerDaoImpl.getAllCustomers());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        allCustomersView.setItems(CustomerDao.getAllCustomers());
+
 
         //Sets up columns for Appointment Table View
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
@@ -78,11 +76,7 @@ public class CustomerAppointmentRecordsController implements Initializable {
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
         //Calls method to populate appointment table view
-        try {
-            allAppointmentsView.setItems(AppointmentDaoImpl.getAllAppointments());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
 
     }
 

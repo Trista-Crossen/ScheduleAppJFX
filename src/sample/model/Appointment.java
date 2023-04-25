@@ -11,11 +11,11 @@ public class Appointment {
     private String type;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private int contact;
+    private String contact;
     private int userId;
     private int customerId;
 
-    public Appointment(int appointmentId, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, int contact, int userId, int customerId) {
+    public Appointment(int appointmentId, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, String contact, int userId, int customerId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -84,11 +84,11 @@ public class Appointment {
         this.endTime = endTime;
     }
 
-    public int getContact() {
+    public String getContact() {
         return contact;
     }
 
-    public void setContact(int contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 
