@@ -74,13 +74,13 @@ public abstract class AppointmentDao {
             int userId = rs.getInt("User_ID");
         }
     }
-/*
+
         public static void selectAppointments(int customerID) throws SQLException {
             String sql = "SELECT Appointment_ID, Title, Description, Location, Contact_Name, Type, Start, End, Customer_ID, User_ID " +
                     "FROM client_schedule.appointments INNER JOIN client_schedule.contacts ON appointments.Contact_ID = contacts.Contact_ID WHERE Customer_ID = ?";
             PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
             ps.setInt(1, customerID);
-            ResultSet rs = ps.executeQuery(sql);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int appointmentId = rs.getInt("Appointment_ID");
                 String title = rs.getString("Title");
@@ -95,6 +95,6 @@ public abstract class AppointmentDao {
 
                 System.out.println(appointmentId + " | " + title  + " | " + description  + " | " + location  + " | " + contactName  + " | " + type  + " | " + startTime  + " | " + endTime  + " | " + customerId  + " | " + userId);
             }
-        }*/
+        }
 
 }

@@ -1,5 +1,6 @@
 package sample.model;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 public class Appointment {
@@ -8,13 +9,13 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private ZonedDateTime startTime;
-    private ZonedDateTime endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private int contact;
     private int userId;
     private int customerId;
 
-    public Appointment(int appointmentId, String title, String description, String location, String type, ZonedDateTime startTime, ZonedDateTime endTime, int contact, int userId, int customerId) {
+    public Appointment(int appointmentId, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, int contact, int userId, int customerId) {
         this.appointmentId = appointmentId;
         this.title = title;
         this.description = description;
@@ -67,19 +68,19 @@ public class Appointment {
         this.type = type;
     }
 
-    public ZonedDateTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(ZonedDateTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public ZonedDateTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(ZonedDateTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
