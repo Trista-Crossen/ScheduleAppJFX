@@ -13,6 +13,36 @@ import java.time.LocalDateTime;
 
 public abstract class AppointmentDao {
 
+    public static ObservableList<Appointment> getAllAppointments() {
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+        String sql = "SELECT Appointment_ID, Title, Description, Location, Contact_Name, Type, Start, End, Customer_ID, User_ID " +
+                "FROM client_schedule.appointments, client_schedule.contacts " +
+                "WHERE appointments.Contact_ID = contacts.Contact_ID";
+        try {
+            PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+            while (rs.next()) {
+                int appointmentId = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String contactName = rs.getString("Contact_Name");
+                String type = rs.getString("Type");
+                LocalDateTime startTime = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime endTime = rs.getTimestamp("End").toLocalDateTime();
+                int customerId = rs.getInt("Customer_ID");
+                int userId = rs.getInt("User_ID");
+
+                Appointment appointment = new Appointment(appointmentId, title, description, location, type, startTime, endTime, contactName, userId, customerId);
+
+                allAppointments.add(appointment);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return allAppointments;
+    }
+
     public static void addAppointment(String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, String createdBy, String lastUpdateBy, int customerId, int userId, int contactId) throws SQLException {
         String sql = "INSERT INTO client_schedule.appointments(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
@@ -52,36 +82,6 @@ public abstract class AppointmentDao {
         ps.setInt(1, appointmentId);
 
         ps.executeUpdate();
-    }
-
-    public static ObservableList<Appointment> getAllAppointments() {
-        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
-        String sql = "SELECT Appointment_ID, Title, Description, Location, Contact_Name, Type, Start, End, Customer_ID, User_ID " +
-                "FROM client_schedule.appointments, client_schedule.contacts " +
-                "WHERE appointments.Contact_ID = contacts.Contact_ID";
-        try {
-            PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery(sql);
-            while (rs.next()) {
-                int appointmentId = rs.getInt("Appointment_ID");
-                String title = rs.getString("Title");
-                String description = rs.getString("Description");
-                String location = rs.getString("Location");
-                String contactName = rs.getString("Contact_Name");
-                String type = rs.getString("Type");
-                LocalDateTime startTime = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime endTime = rs.getTimestamp("End").toLocalDateTime();
-                int customerId = rs.getInt("Customer_ID");
-                int userId = rs.getInt("User_ID");
-
-                Appointment appointment = new Appointment(appointmentId, title, description, location, type, startTime, endTime, contactName, userId, customerId);
-
-                allAppointments.add(appointment);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return allAppointments;
     }
 
         public static void selectAppointments(int customerID) throws SQLException {

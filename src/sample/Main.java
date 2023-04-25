@@ -27,8 +27,6 @@ public class Main extends Application {
         DBConnection.openConnection();
         launch(args);
 
-        CustomerDao.addCustomer("Jack Stone", "4567 Livlely Ln", "90u83", "90-349-30984",8);
-
         DBConnection.closeConnection();
     }
 }

@@ -6,6 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,6 +20,7 @@ import sample.model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerAppointmentRecordsController implements Initializable {
@@ -44,7 +47,6 @@ public class CustomerAppointmentRecordsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         //Sets up columns for Customer Table View
         customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
@@ -100,6 +102,49 @@ public class CustomerAppointmentRecordsController implements Initializable {
     }
 
     public void deleteCustomerOnClick(ActionEvent actionEvent) {
+        //Gives error that no Customer is selected
+        if(allCustomersView.getSelectionModel().isEmpty()){
+            Alert noCustomerSelectedError = new Alert(Alert.AlertType.ERROR);
+            noCustomerSelectedError.setTitle("Error!");
+            noCustomerSelectedError.setHeaderText(null);
+            noCustomerSelectedError.setContentText("No customer was selected! Please select a customer and try again.");
+
+            noCustomerSelectedError.showAndWait();
+        }
+        else {
+            Customer selectedCustomer = allCustomersView.getSelectionModel().getSelectedItem();
+
+            //Dialog box that lets user know customer was successfully deleted
+            Alert deleteCustomerAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            deleteCustomerAlert.setTitle("Delete this customer?");
+            deleteCustomerAlert.setContentText("Are you sure you want to delete this customer record?");
+
+            Optional<ButtonType> result = deleteCustomerAlert.showAndWait();
+            if(result.get() == ButtonType.OK){
+                CustomerDao.deleteCustomer(selectedCustomer.getCustomerId());
+
+                //Dialog box to let user know Customer record was deleted
+                Alert customerDeleteSuccessful = new Alert(Alert.AlertType.INFORMATION);
+                customerDeleteSuccessful.setTitle("Customer record deleted");
+                customerDeleteSuccessful.setHeaderText(null);
+                customerDeleteSuccessful.setContentText("Customer record was successfully deleted.");
+
+                customerDeleteSuccessful.showAndWait();
+            }
+            else{
+                deleteCustomerAlert.close();
+
+                //Dialog box that lets user know that they canceled the record deletion
+                Alert deleteCustomerCanceled = new Alert(Alert.AlertType.INFORMATION);
+                deleteCustomerCanceled.setTitle("Customer record not deleted");
+                deleteCustomerCanceled.setHeaderText(null);
+                deleteCustomerCanceled.setContentText("Customer record deletion canceled by user.");
+
+                deleteCustomerCanceled.close();
+            }
+        }
+        //Clears item selection after delete is complete
+        allCustomersView.getSelectionModel().clearSelection();
     }
 
     public void addAppointmentOnClick(ActionEvent actionEvent) throws IOException {

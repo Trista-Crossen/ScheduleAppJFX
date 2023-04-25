@@ -2,9 +2,6 @@ package sample.model;
 
 public class Customer {
     private int customerId;
-
-
-
     private String customerName;
     private String address;
     private String postalCode;
@@ -12,7 +9,7 @@ public class Customer {
     private String country;
     private String firstLevelDivision;
 
-    public Customer(int customerId, String customerName, String address, String postalCode, String phoneNumber, String country, String firstLevelDivision) {
+    public Customer(int customerId, String customerName, String address, String firstLevelDivision, String country, String postalCode, String phoneNumber) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.address = address;
@@ -45,6 +42,12 @@ public class Customer {
 
     public void setAddress(String address) {
         this.address = address;
+    } public String getFirstLevelDivision() {
+        return firstLevelDivision;
+    }
+
+    public void setFirstLevelDivision(String firstLevelDivision) {
+        this.firstLevelDivision = firstLevelDivision;
     }
 
     public String getPostalCode() {
@@ -55,14 +58,6 @@ public class Customer {
         this.postalCode = postalCode;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public String getCountry() {
         return country;
     }
@@ -71,11 +66,12 @@ public class Customer {
         this.country = country;
     }
 
-    public String getFirstLevelDivision() {
-        return firstLevelDivision;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setFirstLevelDivision(String firstLevelDivision) {
-        this.firstLevelDivision = firstLevelDivision;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
+
 }
