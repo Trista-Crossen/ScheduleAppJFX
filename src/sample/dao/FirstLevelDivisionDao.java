@@ -9,13 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class FirstLevelDivisionDao {
-    public static ObservableList<FirstLevelDivision> getFirstLevelDivisions(int countryId){
+    public static ObservableList<FirstLevelDivision> getFirstLevelDivisions(){
         ObservableList<FirstLevelDivision> firstLevelDivisions = FXCollections.observableArrayList();
-        String sql = "SELECT Division_ID, Division FROM client_schedule.first_level_divisions WHERE Country_ID = ? ";
+        String sql = "SELECT Division_ID, Division FROM client_schedule.first_level_divisions";
 
         try {
             PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
-            ps.setInt(1, countryId);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {

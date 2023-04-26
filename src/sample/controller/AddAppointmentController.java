@@ -6,16 +6,54 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sample.dao.ContactDao;
+import sample.dao.CustomerDao;
+import sample.dao.UserDao;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class AddAppointmentController implements Initializable {
 
+    public ComboBox contactComboBox;
+    public ComboBox userComboBox;
+    public ComboBox customerComboBox;
+    public DatePicker datePicker;
+    public TextField titleTxtField;
+    public TextField descriptionTxtField;
+    public TextField locationTxtField;
+    public TextField typeTxtField;
+    public ComboBox startTimeComboBox;
+    public ComboBox endTimeComboBox;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Getting Contact items into combo box
+        contactComboBox.setItems(ContactDao.getAllContacts());
+
+        //Getting User items into combo box
+        userComboBox.setItems(UserDao.getUserInfo());
+
+        //Getting Customer items into combo box
+        customerComboBox.setItems(CustomerDao.getAllCustomers());
+
+        //Getting the time set up for the time combo boxes
+        LocalTime officeOpen = LocalTime.of(6, 0);
+        LocalTime officeClose = LocalTime.of(20, 0);
+
+        //Getting office hours into a list and put into combo boxes
+        while (officeOpen.isBefore(officeClose.plusSeconds(1))) {
+            startTimeComboBox.getItems().add(officeOpen);
+            officeOpen = officeOpen.plusHours(1);
+
+            endTimeComboBox.getItems().add(officeOpen.minusHours(1));
+        }
     }
 
     public void saveNewAppointmentOnClick(ActionEvent actionEvent) throws IOException {
