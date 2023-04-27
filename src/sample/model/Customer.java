@@ -1,6 +1,9 @@
 package sample.model;
 
-public class Customer {
+import javafx.collections.ObservableList;
+import javafx.scene.control.SingleSelectionModel;
+
+public class Customer extends SingleSelectionModel<Country> {
     private int customerId;
     private String customerName;
     private String address;
@@ -42,7 +45,9 @@ public class Customer {
 
     public void setAddress(String address) {
         this.address = address;
-    } public String getFirstLevelDivision() {
+    }
+
+    public String getFirstLevelDivision() {
         return firstLevelDivision;
     }
 
@@ -77,5 +82,15 @@ public class Customer {
     @Override
     public String toString(){
         return (customerName);
+    }
+
+    @Override
+    protected Country getModelItem(int i) {
+        return null;
+    }
+
+    @Override
+    protected int getItemCount() {
+        return 0;
     }
 }

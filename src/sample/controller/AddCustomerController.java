@@ -1,11 +1,14 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -13,6 +16,7 @@ import sample.dao.CountryDao;
 import sample.dao.CustomerDao;
 import sample.dao.FirstLevelDivisionDao;
 import sample.model.Country;
+import sample.model.FirstLevelDivision;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,26 +24,30 @@ import java.util.ResourceBundle;
 
 public class AddCustomerController implements Initializable {
 
-    public ComboBox countryComboBox;
-    public ComboBox firstLevelDivisionComboBox;
-    public TextField customerIdTxtField;
+    public ComboBox<Country> countryComboBox;
+    public ComboBox<FirstLevelDivision> firstLevelDivisionComboBox;
     public TextField customerNameTxtField;
     public TextField addressTxtField;
     public TextField postalCodeTxtField;
     public TextField phoneNumberTxtField;
+    public Button countryOkButton;
+    public Country selectedCountry;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Setting Country items into a combo box
         countryComboBox.setItems(CountryDao.getAllCountries());
-
-        //Setting FirstLevelDivision items into a combo box
-        firstLevelDivisionComboBox.setItems(FirstLevelDivisionDao.getFirstLevelDivisions());
     }
 
     public void saveNewCustomerOnClick(ActionEvent actionEvent) throws IOException {
         //Adds new customer to records
+        String customerName = customerNameTxtField.getText();
+        String address = addressTxtField.getText();
+        String postalCode = postalCodeTxtField.getText();
+        String phoneNumber = phoneNumberTxtField.getText();
+        int division = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem().getDivisionId();
 
+        CustomerDao.addCustomer(customerName, address, postalCode, phoneNumber, division);
 
         //Sets scene for Main screen
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
@@ -65,4 +73,11 @@ public class AddCustomerController implements Initializable {
         stage.show();
     }
 
+    public void selectCountryOnClick(ActionEvent actionEvent) {
+        //Gets the selected country id to fill the first level division box
+       selectedCountry = countryComboBox.getSelectionModel().getSelectedItem();
+       int countryId = selectedCountry.getCountryId();
+
+       firstLevelDivisionComboBox.setItems(FirstLevelDivisionDao.getFirstLevelDivisions(countryId));
+    }
 }

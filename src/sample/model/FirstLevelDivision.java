@@ -1,10 +1,13 @@
 package sample.model;
 
-public class FirstLevelDivision {
+public class FirstLevelDivision{
+    private int countryId;
     private int divisionId;
     private String divisionName;
 
-    public FirstLevelDivision(int divisionId, String divisionName) {
+
+    public FirstLevelDivision(int countryId, int divisionId, String divisionName) {
+        this.countryId = countryId;
         this.divisionId = divisionId;
         this.divisionName = divisionName;
     }
@@ -13,20 +16,13 @@ public class FirstLevelDivision {
         return divisionId;
     }
 
-    public void setDivisionId(int divisionId) {
-        this.divisionId = divisionId;
-    }
-
     public String getDivisionName() {
         return divisionName;
-    }
-
-    public void setDivisionName(String divisionName) {
-        this.divisionName = divisionName;
     }
 
     @Override
     public String toString() {
         return (divisionName);
     }
+
 }

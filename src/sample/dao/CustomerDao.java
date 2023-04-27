@@ -2,7 +2,9 @@ package sample.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sample.model.Country;
 import sample.model.Customer;
+import sample.model.FirstLevelDivision;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

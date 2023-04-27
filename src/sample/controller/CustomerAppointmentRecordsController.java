@@ -6,10 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.dao.AppointmentDao;
@@ -44,6 +41,8 @@ public class CustomerAppointmentRecordsController implements Initializable {
     public TableColumn<Appointment, LocalDateTime> endCol;
     public TableColumn<Appointment, Integer> customerIdARCol;
     public TableColumn<Appointment, Integer> userIdCol;
+    public Customer selectedCustomer;
+    public Button updateCustomerButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -90,15 +89,32 @@ public class CustomerAppointmentRecordsController implements Initializable {
     }
 
     public void updateCustomerOnClick(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/sample/view/update-customer.fxml"));
+        if(allCustomersView.getSelectionModel().isEmpty()){
+            Alert noCustomerSelectedError = new Alert(Alert.AlertType.ERROR);
+            noCustomerSelectedError.setTitle("Error!");
+            noCustomerSelectedError.setHeaderText(null);
+            noCustomerSelectedError.setContentText("No customer was selected. Please select a customer and try again.");
+            noCustomerSelectedError.showAndWait();
+        }
+        else{
+            //Gets customer data from selected customer
+            selectedCustomer = allCustomersView.getSelectionModel().getSelectedItem();
+            //Loads widget hierarchy of next screen
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/update-customer.fxml"));
+            Parent root = loader.load();
 
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            //Gets access to selected customer data
+            UpdateCustomerController updateCustomer = loader.getController();
+            updateCustomer.setFields(selectedCustomer);
 
-        Scene scene = new Scene(root, 751, 621);
-        stage.setTitle("Update Customer");
+            Scene scene = new Scene(root, 751, 621);
 
-        stage.setScene(scene);
-        stage.show();
+            //Sets the scene
+            Stage stage = (Stage) updateCustomerButton.getScene().getWindow();
+            stage.setTitle("Update Customer");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void deleteCustomerOnClick(ActionEvent actionEvent) {
