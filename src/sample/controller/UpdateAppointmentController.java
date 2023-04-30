@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
 import sample.dao.UserDao;
+import sample.helper.OfficeHoursOfOperation;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,16 +45,9 @@ public class UpdateAppointmentController implements Initializable {
         //Getting Customer items into combo box
         customerComboBox.setItems(CustomerDao.getAllCustomers());
 
-        //Getting the time set up for the time combo boxes
-        LocalTime officeOpen = LocalTime.of(6, 0);
-        LocalTime officeClose = LocalTime.of(20, 0);
-
-        while (officeOpen.isBefore(officeClose.plusSeconds(1))) {
-            startTimeComboBox.getItems().add(officeOpen);
-            officeOpen = officeOpen.plusHours(1);
-
-            endTimeComboBox.getItems().add(officeOpen.minusHours(1));
-        }
+        //Getting time combo boxes filled
+        startTimeComboBox.setItems(OfficeHoursOfOperation.getStartTime());
+        endTimeComboBox.setItems(OfficeHoursOfOperation.getEndTime());
 
     }
 

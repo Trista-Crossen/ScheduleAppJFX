@@ -10,6 +10,8 @@ import sample.dao.*;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 public class Main extends Application {
@@ -26,6 +28,8 @@ public class Main extends Application {
     public static void main(String[] args) throws SQLException {
         DBConnection.openConnection();
         launch(args);
+
+        ResourceBundle rs = ResourceBundle.getBundle("ScheduleAppJFX/src/sample/helper/Nat", Locale.getDefault());
 
         DBConnection.closeConnection();
     }
