@@ -52,6 +52,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="278.0" layoutY="350.0" mnemonicParsing="false" onAction="#enterSchedulingAppOnClick" text="Enter" />
+      <Button fx:id="enterButton" layoutX="278.0" layoutY="350.0" mnemonicParsing="false" onAction="#enterSchedulingAppOnClick" text="Enter" />
    </children>
 </AnchorPane>

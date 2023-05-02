@@ -10,29 +10,38 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sample.dao.AppointmentDao;
 import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
 import sample.dao.UserDao;
 import sample.helper.OfficeHoursOfOperation;
+import sample.model.Appointment;
+import sample.model.Contact;
+import sample.model.Customer;
+import sample.model.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class UpdateAppointmentController implements Initializable {
 
-    public ComboBox contactComboBox;
-    public ComboBox userComboBox;
-    public ComboBox customerComboBox;
+    public ComboBox<Contact> contactComboBox;
+    public ComboBox<User> userComboBox;
+    public ComboBox<Customer> customerComboBox;
     public DatePicker datePicker;
     public TextField appointmentIdTxtField;
     public TextField titleTxtField;
-    public TextField discriptionTxtField;
+    public TextField descriptionTxtField;
     public TextField locationTxtField;
     public TextField typeTxtField;
     public ComboBox startTimeComboBox;
     public ComboBox endTimeComboBox;
+    private Appointment selectedAppointment;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -51,7 +60,37 @@ public class UpdateAppointmentController implements Initializable {
 
     }
 
-    public void saveUpdateOnClick(ActionEvent actionEvent) throws IOException {
+    public void setFields(Appointment selectedAppointment) {
+        this.selectedAppointment = selectedAppointment;
+        appointmentIdTxtField.setText(Integer.toString(selectedAppointment.getAppointmentId()));
+        titleTxtField.setText(selectedAppointment.getTitle());
+        descriptionTxtField.setText(selectedAppointment.getDescription());
+        locationTxtField.setText(selectedAppointment.getLocation());
+        typeTxtField.setText(selectedAppointment.getType());
+        //FIXME: Need help getting combo boxes and data picker filled with appointment data
+        //contactComboBox.setSelectionModel(selectedAppointment);
+        //userComboBox.setSelectionModel(selectedAppointment);
+        //customerComboBox.setSelectionModel(selectedAppointment);
+        //startTimeComboBox.setSelectionModel(selectedAppointment);
+        //endTimeComboBox.setSelectionModel(selectedAppointment);
+    }
+
+    public void saveUpdateOnClick(ActionEvent actionEvent) throws IOException, SQLException {
+        String title = titleTxtField.getText();
+        String description = descriptionTxtField.getText();
+        String location = locationTxtField.getText();
+        String type = typeTxtField.getText();
+        contactComboBox.getSelectionModel().getSelectedItem();
+        userComboBox.getSelectionModel().getSelectedItem();
+        customerComboBox.getSelectionModel().getSelectedItem();
+        LocalDate date = datePicker.getValue();
+        LocalTime startTime = (LocalTime) startTimeComboBox.getSelectionModel().getSelectedItem();
+        LocalTime endTime = (LocalTime) endTimeComboBox.getSelectionModel().getSelectedItem();
+        LocalDateTime start = date.atTime(startTime);
+        LocalDateTime end = date.atTime(endTime);
+
+        AppointmentDao.updateAppointment(selectedAppointment.getAppointmentId(), title, description, location, type, start, end, customerComboBox.getSelectionModel().getSelectedItem().getCustomerId(), userComboBox.getSelectionModel().getSelectedItem().getUserId(), contactComboBox.getSelectionModel().getSelectedItem().getContactId());
+
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

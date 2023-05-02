@@ -10,21 +10,28 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sample.dao.AppointmentDao;
 import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
 import sample.dao.UserDao;
 import sample.helper.OfficeHoursOfOperation;
+import sample.model.Contact;
+import sample.model.Customer;
+import sample.model.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class AddAppointmentController implements Initializable {
 
-    public ComboBox contactComboBox;
-    public ComboBox userComboBox;
-    public ComboBox customerComboBox;
+    public ComboBox<Contact> contactComboBox;
+    public ComboBox<User> userComboBox;
+    public ComboBox<Customer> customerComboBox;
     public DatePicker datePicker;
     public TextField titleTxtField;
     public TextField descriptionTxtField;
@@ -49,7 +56,23 @@ public class AddAppointmentController implements Initializable {
         endTimeComboBox.setItems(OfficeHoursOfOperation.getEndTime());
     }
 
-    public void saveNewAppointmentOnClick(ActionEvent actionEvent) throws IOException {
+    public void saveNewAppointmentOnClick(ActionEvent actionEvent) throws IOException, SQLException {
+        //Adds new appointment to records
+        String title = titleTxtField.getText();
+        String description = descriptionTxtField.getText();
+        String location = locationTxtField.getText();
+        String type = typeTxtField.getText();
+        int contactId = contactComboBox.getSelectionModel().getSelectedItem().getContactId();
+        int userId = userComboBox.getSelectionModel().getSelectedItem().getUserId();
+        int customerId = customerComboBox.getSelectionModel().getSelectedItem().getCustomerId();
+        LocalDate date = datePicker.getValue();
+        LocalTime startTime = (LocalTime) startTimeComboBox.getSelectionModel().getSelectedItem();
+        LocalTime endTime = (LocalTime) endTimeComboBox.getSelectionModel().getSelectedItem();
+        LocalDateTime start = date.atTime(startTime);
+        LocalDateTime end = date.atTime(endTime);
+
+        AppointmentDao.addAppointment(title, description, location, type, start, end, contactId, userId, customerId);
+
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

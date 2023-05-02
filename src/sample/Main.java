@@ -29,8 +29,6 @@ public class Main extends Application {
         DBConnection.openConnection();
         launch(args);
 
-        ResourceBundle rs = ResourceBundle.getBundle("ScheduleAppJFX/src/sample/helper/Nat", Locale.getDefault());
-
         DBConnection.closeConnection();
     }
 }

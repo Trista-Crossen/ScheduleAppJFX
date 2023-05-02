@@ -93,12 +93,16 @@ public abstract class CustomerDao {
 
     public static void selectCustomerIdAndName() throws SQLException {
         String sql = "SELECT Customer_ID, Customer_Name FROM client_schedule.customers";
-        PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery(sql);
+        try {
+            PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
 
-        while(rs.next()) {
-            int customerId = rs.getInt("Customer_ID");
-            String customerName = rs.getString("Customer_Name");
+            while (rs.next()) {
+                int customerId = rs.getInt("Customer_ID");
+                String customerName = rs.getString("Customer_Name");
+            }
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 }

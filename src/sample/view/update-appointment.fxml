@@ -29,7 +29,7 @@
       <Label layoutX="75.0" layoutY="446.0" text="Date:" />
       <TextField fx:id="appointmentIdTxtField" layoutX="138.0" layoutY="98.0" />
       <TextField fx:id="titleTxtField" layoutX="138.0" layoutY="171.0" />
-      <TextField fx:id="discriptionTxtField" layoutX="138.0" layoutY="238.0" />
+      <TextField fx:id="descriptionTxtField" layoutX="138.0" layoutY="238.0" />
       <TextField fx:id="locationTxtField" layoutX="138.0" layoutY="306.0" />
       <TextField fx:id="typeTxtField" layoutX="138.0" layoutY="383.0" />
       <Label layoutX="79.0" layoutY="387.0" text="Type:" />

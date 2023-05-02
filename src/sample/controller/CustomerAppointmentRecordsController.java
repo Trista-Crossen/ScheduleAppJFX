@@ -16,6 +16,7 @@ import sample.model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -35,14 +36,16 @@ public class CustomerAppointmentRecordsController implements Initializable {
     public TableColumn<Appointment, String> titleCol;
     public TableColumn<Appointment, String> descriptionCol;
     public TableColumn<Appointment, String> locationCol;
-    public TableColumn<Appointment, String> contactCol;
+    public TableColumn<Appointment, Integer> contactCol;
     public TableColumn<Appointment, String> typeCol;
     public TableColumn<Appointment, LocalDateTime> startCol;
     public TableColumn<Appointment, LocalDateTime> endCol;
     public TableColumn<Appointment, Integer> customerIdARCol;
     public TableColumn<Appointment, Integer> userIdCol;
     public Customer selectedCustomer;
+    public Appointment selectedAppointment;
     public Button updateCustomerButton;
+    public Button updateAppointmentButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,7 +67,7 @@ public class CustomerAppointmentRecordsController implements Initializable {
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        contactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        contactCol.setCellValueFactory(new PropertyValueFactory<>("contactId"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         startCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         endCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
@@ -126,7 +129,7 @@ public class CustomerAppointmentRecordsController implements Initializable {
             noCustomerSelectedError.setContentText("No customer was selected! Please select a customer and try again.");
 
             noCustomerSelectedError.showAndWait();
-        }
+        }//FIXME: Need to set the dialog box to print the customerId and name
         else {
             Customer selectedCustomer = allCustomersView.getSelectionModel().getSelectedItem();
 
@@ -156,7 +159,7 @@ public class CustomerAppointmentRecordsController implements Initializable {
                 deleteCustomerCanceled.setHeaderText(null);
                 deleteCustomerCanceled.setContentText("Customer record deletion canceled by user.");
 
-                deleteCustomerCanceled.close();
+                deleteCustomerCanceled.showAndWait();
             }
         }
         //Clears item selection after delete is complete
@@ -176,18 +179,71 @@ public class CustomerAppointmentRecordsController implements Initializable {
     }
 
     public void updateAppointmentOnClick(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/sample/view/update-appointment.fxml"));
+        if(allAppointmentsView.getSelectionModel().isEmpty()) {
+            Alert noAppointmentSelectedError = new Alert(Alert.AlertType.ERROR);
+            noAppointmentSelectedError.setTitle("Error!");
+            noAppointmentSelectedError.setHeaderText(null);
+            noAppointmentSelectedError.setContentText("No appointment was selected. Please select an appointment and try again.");
+            noAppointmentSelectedError.showAndWait();
+        }
+        else {
+            //Gets appointment data from selected appointment
+            selectedAppointment = allAppointmentsView.getSelectionModel().getSelectedItem();
 
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            //Loads widget hierarchy of next screen
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/update-appointment.fxml"));
+            Parent root = loader.load();
 
-        Scene scene = new Scene(root, 804, 612);
-        stage.setTitle("Update Appointment");
+            //Gets access to selected appointment data
+            UpdateAppointmentController updateAppointment = loader.getController();
+            updateAppointment.setFields(selectedAppointment);
+            Scene scene = new Scene(root, 804, 612);
 
-        stage.setScene(scene);
-        stage.show();
+            //Sets the scene
+            Stage stage = (Stage) updateAppointmentButton.getScene().getWindow();
+            stage.setTitle("Update Appointment");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
-    public void deleteAppointmentOnClick(ActionEvent actionEvent) {
+    public void deleteAppointmentOnClick(ActionEvent actionEvent) throws SQLException {
+        //Gives error that no appointment is selected
+        if(allAppointmentsView.getSelectionModel().isEmpty()){
+            Alert noAppointmentSelectedError = new Alert(Alert.AlertType.ERROR);
+            noAppointmentSelectedError.setTitle("Error!");
+            noAppointmentSelectedError.setHeaderText(null);
+            noAppointmentSelectedError.setContentText("No appointment was selected! Please select an appointment and try again.");
+            noAppointmentSelectedError.showAndWait();
+        } //FIXME: Need to get appointmentId and title to print out in the dialog box
+        else{
+            selectedAppointment = allAppointmentsView.getSelectionModel().getSelectedItem();
+
+            //Dialog box that asks user if they want to delete appointment
+            Alert deleteAppointmentAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            deleteAppointmentAlert.setTitle("Delete this appointment?");
+            deleteAppointmentAlert.setContentText("Are you sure you want to delete this appointment record?");
+            Optional<ButtonType> result = deleteAppointmentAlert.showAndWait();
+            if(result.get() == ButtonType.OK) {
+                AppointmentDao.deleteAppointment(selectedAppointment.getAppointmentId());
+
+                //Dialog box that lets user know appointment record was deleted
+                Alert appointmentDeleteSucessful = new Alert(Alert.AlertType.INFORMATION);
+                appointmentDeleteSucessful.setTitle("Appointment record deleted");
+                appointmentDeleteSucessful.setHeaderText(null);
+                appointmentDeleteSucessful.setContentText("Appointment record was successfully deleted.");
+                appointmentDeleteSucessful.showAndWait();
+            }else{
+                //Dialog box that lets user know they canceled the record deletion
+                Alert deleteAppointmentCancel = new Alert(Alert.AlertType.INFORMATION);
+                deleteAppointmentCancel.setTitle("Appointment record not deleted");
+                deleteAppointmentCancel.setHeaderText(null);
+                deleteAppointmentCancel.setContentText("Appointment record deletion canceled by user.");
+                deleteAppointmentCancel.showAndWait();
+            }
+        }
+        //Clears item selection after delete is complete
+        allAppointmentsView.getSelectionModel().clearSelection();
     }
 
     public void reportsOnClick(ActionEvent actionEvent) throws IOException {
