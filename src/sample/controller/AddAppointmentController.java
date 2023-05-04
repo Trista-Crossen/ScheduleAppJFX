@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 public class AddAppointmentController implements Initializable {
@@ -51,6 +52,7 @@ public class AddAppointmentController implements Initializable {
         //Getting Customer items into combo box
         customerComboBox.setItems(CustomerDao.getAllCustomers());
 
+        //FIXME: Get help with timezones. Screens come up, but formatting is weird
         //Getting the time set up for the time combo boxes
         startTimeComboBox.setItems(OfficeHoursOfOperation.getStartTime());
         endTimeComboBox.setItems(OfficeHoursOfOperation.getEndTime());

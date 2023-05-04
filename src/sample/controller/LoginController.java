@@ -37,32 +37,29 @@ public class LoginController implements Initializable {
     }
 
     public void enterSchedulingAppOnClick(ActionEvent actionEvent) throws IOException {
-        User userLogin = new User(2, "test", "test");
+        ObservableList<User> userLogin;
+        userLogin = UserDao.getUserInfo();
+        for(int i = 0; i < userLogin.size(); i++){
+            User userLoginInfo = userLogin.get(i);
 
-        if(userNameTextField.getText().equals(userLogin.getUserName()) && passwordTextField.getText().equals(userLogin.getPassword())){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
-            Parent root = loader.load();
+            if(userNameTextField.getText().equals(userLoginInfo.getUserName()) && passwordTextField.getText().equals(userLoginInfo.getPassword())){
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
+                Parent root = loader.load();
 
-            Scene scene = new Scene(root, 896, 674);
+                Scene scene = new Scene(root, 896, 674);
 
-            //Sets the scene
-            Stage stage = (Stage) enterButton.getScene().getWindow();
-            stage.setTitle("Customer and Appointment Records");
-            stage.setScene(scene);
-            stage.show();
+                //Sets the scene
+                Stage stage = (Stage) enterButton.getScene().getWindow();
+                stage.setTitle("Customer and Appointment Records");
+                stage.setScene(scene);
+                stage.show();
+            }
+            else if(userNameTextField.getText().isEmpty() || passwordTextField.getText().isEmpty()){
+                //FIXME: MAKE ALERT THAT FIELDS ARE EMPTY
+            }
+            else{
+                //FIXME: MAKE ALERT THAT A FIELD HAS INCORRECT LOGIN INFO
+            }
         }
-        else if(userNameTextField.getText().isEmpty() || passwordTextField.getText().isEmpty()){
-            //FIXME: MAKE ALERT THAT FIELDS ARE EMPTY
-        }
-        else{
-            //FIXME: MAKE ALERT THAT A FIELD HAS INCORRECT LOGIN INFO
-        }
-       /* Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 896, 674);
-        stage.setTitle("Customer and Appointment Records");
-        stage.setScene(scene);
-        stage.show();*/
-
     }
 }

@@ -57,6 +57,7 @@ public class UpdateAppointmentController implements Initializable {
         //Getting Customer items into combo box
         customerComboBox.setItems(CustomerDao.getAllCustomers());
 
+        //FIXME: Get help with timezones. Screens come up, but formatting is weird
         //Getting time combo boxes filled
         startTimeComboBox.setItems(OfficeHoursOfOperation.getStartTime());
         endTimeComboBox.setItems(OfficeHoursOfOperation.getEndTime());
