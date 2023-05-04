@@ -6,7 +6,6 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
@@ -57,18 +56,17 @@
       <Button fx:id="addAppointmentButton" layoutX="63.0" layoutY="544.0" mnemonicParsing="false" onAction="#addAppointmentOnClick" text="Add" />
       <Button fx:id="updateAppointmentButton" layoutX="397.0" layoutY="544.0" mnemonicParsing="false" onAction="#updateAppointmentOnClick" text="Update" />
       <Button fx:id="deleteAppointmentButton" layoutX="748.0" layoutY="544.0" mnemonicParsing="false" onAction="#deleteAppointmentOnClick" text="Delete" />
-      <Button fx:id="reportsButton" layoutX="194.0" layoutY="618.0" mnemonicParsing="false" onAction="#reportsOnClick" text="View Reports" />
-      <Button fx:id="exitButton" layoutX="672.0" layoutY="618.0" mnemonicParsing="false" onAction="#exitOnClick" text="Exit" />
+      <Button fx:id="reportsButton" layoutX="382.0" layoutY="617.0" mnemonicParsing="false" onAction="#reportsOnClick" text="View Reports" />
       <ButtonBar layoutX="194.0" layoutY="338.0">
          <buttons>
-            <RadioButton mnemonicParsing="false" selected="true" text="Weekly">
+            <RadioButton fx:id="thisWeekRBtn" mnemonicParsing="false" onAction="#onThisWeekSelect" text="This Week">
                <toggleGroup>
                   <ToggleGroup fx:id="appointmentRecordsToggleGroup" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Monthly" toggleGroup="$appointmentRecordsToggleGroup" />
+            <RadioButton fx:id="thisMonthRBtn" mnemonicParsing="false" onAction="#onThisMonthSelect" text="This Month" toggleGroup="$appointmentRecordsToggleGroup" />
+            <RadioButton fx:id="allAppointmentsRBtn" mnemonicParsing="false" onAction="#onAllAppointmentsSelect" selected="true" text="All Appointments" toggleGroup="$appointmentRecordsToggleGroup" />
          </buttons>
       </ButtonBar>
-      <TextField layoutX="592.0" layoutY="334.0" promptText="Search Customer ID" />
    </children>
 </AnchorPane>

@@ -1,5 +1,7 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -46,6 +48,10 @@ public class CustomerAppointmentRecordsController implements Initializable {
     public Appointment selectedAppointment;
     public Button updateCustomerButton;
     public Button updateAppointmentButton;
+    public ToggleGroup appointmentRecordsToggleGroup;
+    public RadioButton thisWeekRBtn;
+    public RadioButton thisMonthRBtn;
+    public RadioButton allAppointmentsRBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -258,7 +264,31 @@ public class CustomerAppointmentRecordsController implements Initializable {
         stage.show();
     }
 
-    public void exitOnClick(ActionEvent actionEvent) {
-        System.exit(0);
+    public void onThisWeekSelect(ActionEvent actionEvent) {
+        ObservableList<Appointment> thisWeeksAppointments = FXCollections.observableArrayList();
+        for(int i = 0; i < allAppointmentsView.getItems().size(); i++){
+            Appointment appointment = allAppointmentsView.getItems().get(i);
+            LocalDateTime now = LocalDateTime.now();
+            if(now.isBefore(appointment.getStartTime()) && appointment.getStartTime().isBefore(now.plusWeeks(1))){
+                thisWeeksAppointments.add(appointment);
+            }
+        }
+        allAppointmentsView.setItems(thisWeeksAppointments);
+    }
+
+    public void onThisMonthSelect(ActionEvent actionEvent) {
+        ObservableList<Appointment> thisMonthsAppointments = FXCollections.observableArrayList();
+        for(int i = 0; i < allAppointmentsView.getItems().size(); i++){
+            Appointment appointment = allAppointmentsView.getItems().get(i);
+            LocalDateTime now = LocalDateTime.now();
+            if(now.isBefore(appointment.getStartTime()) && appointment.getStartTime().isBefore(now.plusMonths(1))){
+                thisMonthsAppointments.add(appointment);
+            }
+        }
+        allAppointmentsView.setItems(thisMonthsAppointments);
+    }
+
+    public void onAllAppointmentsSelect(ActionEvent actionEvent) {
+        allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
     }
 }

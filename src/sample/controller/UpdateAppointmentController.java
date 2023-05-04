@@ -42,6 +42,9 @@ public class UpdateAppointmentController implements Initializable {
     public ComboBox startTimeComboBox;
     public ComboBox endTimeComboBox;
     private Appointment selectedAppointment;
+    private Contact contactOfSelectedAppointment;
+    private User userOfSelectedAppointment;
+    private Customer customerOfSelectedAppointment;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -68,11 +71,11 @@ public class UpdateAppointmentController implements Initializable {
         locationTxtField.setText(selectedAppointment.getLocation());
         typeTxtField.setText(selectedAppointment.getType());
         //FIXME: Need help getting combo boxes and data picker filled with appointment data
-        //contactComboBox.setSelectionModel(selectedAppointment);
-        //userComboBox.setSelectionModel(selectedAppointment);
-        //customerComboBox.setSelectionModel(selectedAppointment);
-        //startTimeComboBox.setSelectionModel(selectedAppointment);
-        //endTimeComboBox.setSelectionModel(selectedAppointment);
+        /*contactComboBox.setSelectionModel(selectedAppointment.getContactId());
+        userComboBox.setSelectionModel(selectedAppointment.getUserId());
+        customerComboBox.setSelectionModel(selectedAppointment.getCustomerId());
+        startTimeComboBox.setSelectionModel(selectedAppointment.getStartTime());
+        endTimeComboBox.setSelectionModel(selectedAppointment.getEndTime());*/
     }
 
     public void saveUpdateOnClick(ActionEvent actionEvent) throws IOException, SQLException {

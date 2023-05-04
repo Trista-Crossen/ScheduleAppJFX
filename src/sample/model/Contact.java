@@ -1,6 +1,8 @@
 package sample.model;
 
-public class Contact {
+import javafx.scene.control.SingleSelectionModel;
+
+public class Contact extends SingleSelectionModel<Contact> {
 
     private int contactId;
     private String contactName;
@@ -29,5 +31,15 @@ public class Contact {
     @Override
     public String toString() {
         return (contactName);
+    }
+
+    @Override
+    protected Contact getModelItem(int i) {
+        return null;
+    }
+
+    @Override
+    protected int getItemCount() {
+        return 0;
     }
 }
