@@ -1,6 +1,8 @@
 package sample.model;
 
-public class FirstLevelDivision{
+import javafx.scene.control.SingleSelectionModel;
+
+public class FirstLevelDivision extends SingleSelectionModel<FirstLevelDivision> {
     private int countryId;
     private int divisionId;
     private String divisionName;
@@ -25,4 +27,13 @@ public class FirstLevelDivision{
         return (divisionName);
     }
 
+    @Override
+    protected FirstLevelDivision getModelItem(int i) {
+        return null;
+    }
+
+    @Override
+    protected int getItemCount() {
+        return 0;
+    }
 }

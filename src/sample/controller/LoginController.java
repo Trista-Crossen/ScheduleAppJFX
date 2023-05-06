@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import sample.dao.DBConnection;
 import sample.dao.UserDao;
@@ -30,6 +27,7 @@ public class LoginController implements Initializable {
     public Label passwordLabel;
     public Label titleLabel;
     public Button enterButton;
+    public Label zoneIdLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -53,12 +51,14 @@ public class LoginController implements Initializable {
                 stage.setTitle("Customer and Appointment Records");
                 stage.setScene(scene);
                 stage.show();
+                break;
             }
-            else if(userNameTextField.getText().isEmpty() || passwordTextField.getText().isEmpty()){
-                //FIXME: MAKE ALERT THAT FIELDS ARE EMPTY
-            }
-            else{
-                //FIXME: MAKE ALERT THAT A FIELD HAS INCORRECT LOGIN INFO
+            else if(!userNameTextField.getText().equals(userLoginInfo.getUserName()) || !passwordTextField.getText().equals(userLoginInfo.getPassword())){
+                Alert incorrectLoginInfoAlert = new Alert(Alert.AlertType.ERROR);
+                incorrectLoginInfoAlert.setTitle("Incorrect log-in information was entered");
+                incorrectLoginInfoAlert.setContentText("Please make sure to enter a correct username and password to enter the program.");
+                incorrectLoginInfoAlert.showAndWait();
+                break;
             }
         }
     }

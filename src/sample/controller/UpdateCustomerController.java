@@ -51,6 +51,15 @@ public class UpdateCustomerController implements Initializable {
         postalCodeTxtField.setText(selectedCustomer.getPostalCode());
         phoneNumberTxtField.setText(selectedCustomer.getPhoneNumber());
         //FIXME: Need help figuring out how to populate the combo boxes with Customer information
+        ObservableList<Country> countries = CountryDao.getAllCountries();
+        ObservableList<FirstLevelDivision> firstLevelDivisions = FirstLevelDivisionDao.getFirstLevelDivisions();
+        String selectedCustomerFLD;
+        for(int i = 0; i < countries.size(); i++) {
+            Country country = countries.get(i);
+            if(country.equals(selectedCustomer.getCountry())){
+                countryComboBox.setSelectionModel(selectedCustomer);
+            }
+        }
         //firstLevelDivisionComboBox.setSelectionModel(selectedCustomer);
         //countryComboBox.setSelectionModel(selectedCustomer);
 
