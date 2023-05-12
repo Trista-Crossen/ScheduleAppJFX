@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -135,41 +137,54 @@ public class CustomerAppointmentRecordsController implements Initializable {
             noCustomerSelectedError.setContentText("No customer was selected! Please select a customer and try again.");
 
             noCustomerSelectedError.showAndWait();
-        }//FIXME: Need to set the dialog box to print the customerId and name
+        }
         else {
             Customer selectedCustomer = allCustomersView.getSelectionModel().getSelectedItem();
+            //Checks if customer has an appointments before delete
+            ObservableList<Appointment> associatedAppointments = FXCollections.observableArrayList();
+            for(int i = 0; i < allAppointmentsView.getItems().size(); i++){
+                Appointment appointment = allAppointmentsView.getItems().get(i);
+                if(appointment.getCustomerId() == selectedCustomer.getCustomerId()){
+                    associatedAppointments.add(appointment);
+                }
+            }
+            if(associatedAppointments.isEmpty()){
+                //Dialog box that asks user if they want to delete customer record
+                Alert deleteCustomerAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                deleteCustomerAlert.setTitle("Delete this customer?");
+                deleteCustomerAlert.setContentText("Are you sure you want to delete this customer record?");
 
-            //Dialog box that lets user know customer was successfully deleted
-            Alert deleteCustomerAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            deleteCustomerAlert.setTitle("Delete this customer?");
-            deleteCustomerAlert.setContentText("Are you sure you want to delete this customer record?");
+                Optional<ButtonType> result = deleteCustomerAlert.showAndWait();
+                if(result.get() == ButtonType.OK){
+                    CustomerDao.deleteCustomer(selectedCustomer.getCustomerId());
 
-            Optional<ButtonType> result = deleteCustomerAlert.showAndWait();
-            if(result.get() == ButtonType.OK){
-                CustomerDao.deleteCustomer(selectedCustomer.getCustomerId());
+                    //Dialog box to let user know Customer record was deleted
+                    Alert customerDeleteSuccessful = new Alert(Alert.AlertType.INFORMATION);
+                    customerDeleteSuccessful.setTitle("Customer record deleted");
+                    customerDeleteSuccessful.setHeaderText(null);
+                    customerDeleteSuccessful.setContentText("Customer record for " + selectedCustomer.getCustomerId() + " " + selectedCustomer.getCustomerName() + " was successfully deleted.");
 
-                //Dialog box to let user know Customer record was deleted
-                Alert customerDeleteSuccessful = new Alert(Alert.AlertType.INFORMATION);
-                customerDeleteSuccessful.setTitle("Customer record deleted");
-                customerDeleteSuccessful.setHeaderText(null);
-                customerDeleteSuccessful.setContentText("Customer record was successfully deleted.");
+                    customerDeleteSuccessful.showAndWait();
+                }
+                else{
+                    //Dialog box that lets user know that they canceled the record deletion
+                    Alert deleteCustomerCanceled = new Alert(Alert.AlertType.INFORMATION);
+                    deleteCustomerCanceled.setTitle("Customer record not deleted");
+                    deleteCustomerCanceled.setHeaderText(null);
+                    deleteCustomerCanceled.setContentText("Customer record deletion canceled by user.");
 
-                customerDeleteSuccessful.showAndWait();
+                    deleteCustomerCanceled.showAndWait();
+                }
             }
             else{
-                deleteCustomerAlert.close();
-
-                //Dialog box that lets user know that they canceled the record deletion
-                Alert deleteCustomerCanceled = new Alert(Alert.AlertType.INFORMATION);
-                deleteCustomerCanceled.setTitle("Customer record not deleted");
-                deleteCustomerCanceled.setHeaderText(null);
-                deleteCustomerCanceled.setContentText("Customer record deletion canceled by user.");
-
-                deleteCustomerCanceled.showAndWait();
+                //Dialog box that lets user know customerId has appointments tied to it
+                Alert customerIdTiedToAppointmentError = new Alert(Alert.AlertType.ERROR);
+                customerIdTiedToAppointmentError.setTitle("Unable to delete customer!");
+                customerIdTiedToAppointmentError.setHeaderText(null);
+                customerIdTiedToAppointmentError.setContentText("Unable to delete this customer from records due to customerId being tied to an appointment. Please delete or update appointments with the corresponding customerId before trying again.");
+                customerIdTiedToAppointmentError.showAndWait();
             }
         }
-        //Clears item selection after delete is complete
-        allCustomersView.getSelectionModel().clearSelection();
     }
 
     public void addAppointmentOnClick(ActionEvent actionEvent) throws IOException {
@@ -221,7 +236,7 @@ public class CustomerAppointmentRecordsController implements Initializable {
             noAppointmentSelectedError.setHeaderText(null);
             noAppointmentSelectedError.setContentText("No appointment was selected! Please select an appointment and try again.");
             noAppointmentSelectedError.showAndWait();
-        } //FIXME: Need to get appointmentId and title to print out in the dialog box
+        }
         else{
             selectedAppointment = allAppointmentsView.getSelectionModel().getSelectedItem();
 
@@ -234,11 +249,11 @@ public class CustomerAppointmentRecordsController implements Initializable {
                 AppointmentDao.deleteAppointment(selectedAppointment.getAppointmentId());
 
                 //Dialog box that lets user know appointment record was deleted
-                Alert appointmentDeleteSucessful = new Alert(Alert.AlertType.INFORMATION);
-                appointmentDeleteSucessful.setTitle("Appointment record deleted");
-                appointmentDeleteSucessful.setHeaderText(null);
-                appointmentDeleteSucessful.setContentText("Appointment record was successfully deleted.");
-                appointmentDeleteSucessful.showAndWait();
+                Alert appointmentDeleteSuccessful = new Alert(Alert.AlertType.INFORMATION);
+                appointmentDeleteSuccessful.setTitle("Appointment record deleted");
+                appointmentDeleteSuccessful.setHeaderText(null);
+                appointmentDeleteSuccessful.setContentText("Appointment record " + selectedAppointment.getAppointmentId() + " " + selectedAppointment.getType() + " was successfully deleted.");
+                appointmentDeleteSuccessful.showAndWait();
             }else{
                 //Dialog box that lets user know they canceled the record deletion
                 Alert deleteAppointmentCancel = new Alert(Alert.AlertType.INFORMATION);
@@ -265,6 +280,7 @@ public class CustomerAppointmentRecordsController implements Initializable {
     }
 
     public void onThisWeekSelect(ActionEvent actionEvent) {
+        allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
         ObservableList<Appointment> thisWeeksAppointments = FXCollections.observableArrayList();
         for(int i = 0; i < allAppointmentsView.getItems().size(); i++){
             Appointment appointment = allAppointmentsView.getItems().get(i);
@@ -277,6 +293,7 @@ public class CustomerAppointmentRecordsController implements Initializable {
     }
 
     public void onThisMonthSelect(ActionEvent actionEvent) {
+        allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
         ObservableList<Appointment> thisMonthsAppointments = FXCollections.observableArrayList();
         for(int i = 0; i < allAppointmentsView.getItems().size(); i++){
             Appointment appointment = allAppointmentsView.getItems().get(i);

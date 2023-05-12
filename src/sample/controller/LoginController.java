@@ -16,6 +16,8 @@ import sample.model.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZoneId;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -31,7 +33,19 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try{
+            ResourceBundle rb = ResourceBundle.getBundle("sample/view/Nat", Locale.getDefault());
 
+            if(Locale.getDefault().getLanguage().equals("fr")){
+                userNameLabel.setText(rb.getString("username"));
+                passwordLabel.setText(rb.getString("password"));
+                titleLabel.setText(rb.getString("log-in"));
+                enterButton.setText(rb.getString("enter"));
+                zoneIdLabel.setText(rb.getString("zoneId"));
+            }
+        }catch(Exception localeNotFound){
+
+        }
     }
 
     public void enterSchedulingAppOnClick(ActionEvent actionEvent) throws IOException {
