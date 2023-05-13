@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="872.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ReportController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="741.0" prefWidth="942.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ReportController">
    <children>
-      <ComboBox layoutX="82.0" layoutY="80.0" prefWidth="150.0" />
-      <ComboBox layoutX="82.0" layoutY="125.0" prefWidth="150.0" />
-      <ComboBox layoutX="82.0" layoutY="292.0" prefWidth="150.0" />
+      <ComboBox fx:id="monthComboBox" layoutX="82.0" layoutY="80.0" prefWidth="150.0" />
+      <ComboBox fx:id="typeComboBox" layoutX="82.0" layoutY="125.0" prefWidth="150.0" />
+      <ComboBox fx:id="contactComboBox" layoutX="82.0" layoutY="292.0" prefWidth="150.0" />
       <Label layoutX="50.0" layoutY="34.0" text="Choose a month and apppointment type to view report.">
          <font>
             <Font size="14.0" />
@@ -24,26 +24,31 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="56.0" layoutY="454.0" text="Third Report (fix title once done)" />
-      <Button fx:id="backButton" layoutX="785.0" layoutY="681.0" mnemonicParsing="false" onAction="#backToMainScreenOnClick" text="Back" />
-      <TableView layoutX="258.0" layoutY="272.0" prefHeight="153.0" prefWidth="527.0">
+      <Label layoutX="56.0" layoutY="454.0" text="Choose a customer to view report.">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Button fx:id="backButton" layoutX="812.0" layoutY="679.0" mnemonicParsing="false" onAction="#backToMainScreenOnClick" text="Back" />
+      <TableView fx:id="contactAppointmentTableView" layoutX="258.0" layoutY="275.0" prefHeight="153.0" prefWidth="595.0">
         <columns>
-          <TableColumn prefWidth="97.0" text="Appointment ID" />
-          <TableColumn prefWidth="76.0" text="Title" />
-            <TableColumn prefWidth="52.0" text="Type" />
-            <TableColumn prefWidth="75.0" text="Description" />
-            <TableColumn prefWidth="75.0" text="Start Time" />
-            <TableColumn prefWidth="75.0" text="End Time" />
-            <TableColumn prefWidth="75.0" text="Customer ID" />
+          <TableColumn fx:id="appointmentIdColumn" prefWidth="97.0" text="Appointment ID" />
+          <TableColumn fx:id="titleColumn" prefWidth="76.0" text="Title" />
+            <TableColumn fx:id="typeColumn" prefWidth="52.0" text="Type" />
+            <TableColumn fx:id="descriptionColumn" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="startTimeColumn" prefWidth="106.0" text="Start Time" />
+            <TableColumn fx:id="endTimeColumn" prefWidth="102.0" text="End Time" />
+            <TableColumn fx:id="customerIdColumn" prefWidth="86.0" text="Customer ID" />
         </columns>
       </TableView>
-      <TextArea disable="true" layoutX="258.0" layoutY="61.0" prefHeight="153.0" prefWidth="527.0" />
+      <TextArea fx:id="firstReportTxtBox" disable="true" editable="false" layoutX="258.0" layoutY="61.0" prefHeight="153.0" prefWidth="595.0" text="Choose a month and appointment type to see how many appointments match your search" />
       <Label layoutX="34.0" layoutY="84.0" text="Month:" />
       <Label layoutX="36.0" layoutY="129.0" text="Type:" />
       <Label layoutX="21.0" layoutY="296.0" text="Contact:" />
-      <TextArea disable="true" layoutX="258.0" layoutY="477.0" prefHeight="153.0" prefWidth="527.0" />
+      <TextArea fx:id="thirdReportTextBox" disable="true" editable="false" layoutX="258.0" layoutY="477.0" prefHeight="153.0" prefWidth="595.0" text="Choose a customer to see how much time they spend in appointments." />
       <Button fx:id="firstReportButton" layoutX="142.0" layoutY="174.0" mnemonicParsing="false" onAction="#printFirstReportOnClick" text="View Report" />
       <Button fx:id="secondReportButton" layoutX="151.0" layoutY="371.0" mnemonicParsing="false" onAction="#printSecondReportOnClick" text="View Report" />
       <Button fx:id="thirdReportButton" layoutX="157.0" layoutY="594.0" mnemonicParsing="false" onAction="#printThirdReportOnClick" text="View Report" />
+      <ComboBox fx:id="customerComboBox" layoutX="76.0" layoutY="529.0" prefWidth="150.0" />
+      <Label layoutX="16.0" layoutY="533.0" text="Customer:" />
    </children>
 </AnchorPane>

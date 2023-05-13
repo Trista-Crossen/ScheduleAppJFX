@@ -27,7 +27,7 @@
       <Label layoutX="489.0" layoutY="175.0" text="User:" />
       <Label layoutX="469.0" layoutY="242.0" text="Customer:" />
       <Label layoutX="75.0" layoutY="446.0" text="Date:" />
-      <TextField editable="false" layoutX="138.0" layoutY="98.0" text="Appointment ID" />
+      <TextField disable="true" editable="false" layoutX="138.0" layoutY="98.0" text="Appointment ID" />
       <TextField fx:id="titleTxtField" layoutX="138.0" layoutY="171.0" promptText="Title of appointment" />
       <TextField fx:id="descriptionTxtField" layoutX="138.0" layoutY="238.0" promptText="Short discription" />
       <TextField fx:id="locationTxtField" layoutX="138.0" layoutY="306.0" promptText="Location" />

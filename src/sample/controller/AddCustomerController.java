@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -47,18 +48,30 @@ public class AddCustomerController implements Initializable {
         String phoneNumber = phoneNumberTxtField.getText();
         int division = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem().getDivisionId();
 
-        CustomerDao.addCustomer(customerName, address, postalCode, phoneNumber, division);
+        if(customerName.isBlank() || address.isBlank() || postalCode.isBlank() || phoneNumber.isBlank() || firstLevelDivisionComboBox.getSelectionModel().isEmpty()){
+            //Dialog box to let user know that fields were left empty
+            Alert blankFieldsError = new Alert(Alert.AlertType.ERROR);
+            blankFieldsError.setTitle("Error!");
+            blankFieldsError.setHeaderText(null);
+            blankFieldsError.setContentText("Please be sure that all required fields are filled before trying to save customer again.");
 
-        //Sets scene for Main screen
-        Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
+            blankFieldsError.showAndWait();
+            return;
+        }
+        else{
+            CustomerDao.addCustomer(customerName, address, postalCode, phoneNumber, division);
 
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            //Sets scene for Main screen
+            Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
-        Scene scene = new Scene(root, 896, 674);
-        stage.setTitle("Customer and Appointment Records");
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        stage.setScene(scene);
-        stage.show();
+            Scene scene = new Scene(root, 896, 674);
+            stage.setTitle("Customer and Appointment Records");
+
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void cancelOnClick(ActionEvent actionEvent) throws IOException {

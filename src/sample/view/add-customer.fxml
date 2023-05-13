@@ -22,7 +22,7 @@
       </Label>
       <Label layoutX="408.0" layoutY="112.0" text="Country:" />
       <Label layoutX="367.0" layoutY="178.0" text="State/Providence:" />
-      <TextField editable="false" layoutX="161.0" layoutY="108.0" promptText="Customer ID" />
+      <TextField disable="true" editable="false" layoutX="161.0" layoutY="108.0" promptText="Customer ID" />
       <TextField fx:id="customerNameTxtField" layoutX="161.0" layoutY="174.0" promptText="Enter Customer Name" />
       <TextField fx:id="addressTxtField" layoutX="161.0" layoutY="245.0" promptText="Enter Address" />
       <TextField fx:id="postalCodeTxtField" layoutX="161.0" layoutY="310.0" promptText="Enter postal code" />

@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
@@ -71,22 +72,33 @@ public class UpdateCustomerController implements Initializable {
         String address = addressTxtField.getText();
         String postalCode = postalCodeTxtField.getText();
         String phoneNumber = phoneNumberTxtField.getText();
-        countryComboBox.getSelectionModel().getSelectedItem();
         firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
 
-        //Updates the Customer data
-        CustomerDao.updateCustomer(selectedCustomer.getCustomerId(), customerName, address, postalCode, phoneNumber, firstLevelDivisionComboBox.getSelectionModel().getSelectedItem().getDivisionId());
+        if(customerName.isBlank() || address.isBlank() || postalCode.isBlank() || phoneNumber.isBlank() || firstLevelDivisionComboBox.getSelectionModel().isEmpty()){
+            //Dialog box to let user know that fields were left empty
+            Alert blankFieldsError = new Alert(Alert.AlertType.ERROR);
+            blankFieldsError.setTitle("Error!");
+            blankFieldsError.setHeaderText(null);
+            blankFieldsError.setContentText("Please be sure that all required fields are filled before trying to save customer again.");
+
+            blankFieldsError.showAndWait();
+            return;
+        }
+        else{
+            //Updates the Customer data
+            CustomerDao.updateCustomer(selectedCustomer.getCustomerId(), customerName, address, postalCode, phoneNumber, firstLevelDivisionComboBox.getSelectionModel().getSelectedItem().getDivisionId());
 
 
-        Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        Scene scene = new Scene(root, 896, 674);
-        stage.setTitle("Customer and Appointment Records");
+            Scene scene = new Scene(root, 896, 674);
+            stage.setTitle("Customer and Appointment Records");
 
-        stage.setScene(scene);
-        stage.show();
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     public void cancelOnClick(ActionEvent actionEvent) throws IOException {
