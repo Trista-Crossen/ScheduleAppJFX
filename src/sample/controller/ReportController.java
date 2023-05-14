@@ -23,6 +23,8 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class ReportController implements Initializable {
@@ -40,13 +42,15 @@ public class ReportController implements Initializable {
     public TextArea firstReportTxtBox;
     public TextArea thirdReportTextBox;
     public ComboBox<Customer> customerComboBox;
-    public ComboBox<Month> monthComboBox;
+    public ComboBox<Appointment> monthComboBox;
     public ComboBox<Appointment> typeComboBox;
     public ComboBox<Contact> contactComboBox;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         //Sets the items in their combo boxes
+        monthComboBox.setItems(AppointmentDao.getMonths());//FIXME: NEED TO GET MONTHS IN COMBO BOX SO I CAN FINISH THIS REPORT
+        typeComboBox.setItems(AppointmentDao.getTypes());
         contactComboBox.setItems(ContactDao.getAllContacts());
         customerComboBox.setItems(CustomerDao.getAllCustomers());
 
@@ -73,6 +77,18 @@ public class ReportController implements Initializable {
     }
 
     public void printFirstReportOnClick(ActionEvent actionEvent) {
+        ObservableList<Appointment> appointmentsByTypeAndMonth = FXCollections.observableArrayList();
+        int numberOfAppointments = 0;
+        Appointment selectedMonth = monthComboBox.getSelectionModel().getSelectedItem();
+        Appointment selectedType = typeComboBox.getSelectionModel().getSelectedItem();
+        for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++){
+            Appointment appointment = AppointmentDao.getAllAppointments().get(i);
+            if(appointment.getStartTime().getMonth().equals(selectedMonth) && appointment.getType().equals(selectedType)){
+                appointmentsByTypeAndMonth.add(appointment);
+                numberOfAppointments++;
+            }
+        }
+        firstReportTxtBox.setText("The number of appointments by month:" + selectedMonth.toString() + " and type: " + selectedType.toString() + " is " + numberOfAppointments);
     }
 
     public void printSecondReportOnClick(ActionEvent actionEvent) {

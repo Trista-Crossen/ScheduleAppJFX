@@ -4,11 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.model.Appointment;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 
 public abstract class AppointmentDao {
 
@@ -94,6 +93,39 @@ public abstract class AppointmentDao {
         }catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public static ObservableList<Appointment> getTypes() {
+        ObservableList<Appointment> appointmentTypes = FXCollections.observableArrayList();
+        String sql = "SELECT distinct Type from client_schedule.appointments";
+        try {
+            PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+            while(rs.next()){
+                String type = rs.getString("Type");
+
+                Appointment appointmentType = new Appointment(type);
+
+                appointmentTypes.add(appointmentType);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return appointmentTypes;
+    }
+
+    public static ObservableList<Appointment> getMonths() {
+        ObservableList<Appointment> appointmentMonths = FXCollections.observableArrayList();
+        for(int i = 0; i < getAllAppointments().size(); i++){
+            Appointment appointment = getAllAppointments().get(i);
+            Month appointmentMonth = appointment.getStartTime().getMonth();
+            Appointment month = new Appointment(appointmentMonth);
+            if(!month.equals(getAllAppointments().get(i).getStartTime().getMonth())){
+                appointmentMonths.add(month);
+            }
+            month.toString();
+        }
+        return appointmentMonths;
     }
 }
 

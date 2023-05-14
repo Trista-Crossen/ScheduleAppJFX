@@ -1,6 +1,8 @@
 package sample.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZonedDateTime;
 
 public class Appointment {
@@ -14,6 +16,7 @@ public class Appointment {
     private int contactId;
     private int userId;
     private int customerId;
+    private Month month;
 
     public Appointment(int appointmentId, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, int contactId, int userId, int customerId) {
         this.appointmentId = appointmentId;
@@ -26,6 +29,14 @@ public class Appointment {
         this.contactId = contactId;
         this.userId = userId;
         this.customerId = customerId;
+    }
+
+    public Appointment(String type) {
+        this.type = type;
+    }
+
+    public Appointment(Month month) {
+        this.month = month;
     }
 
     public int getAppointmentId() {
@@ -107,4 +118,11 @@ public class Appointment {
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
+
+    @Override
+    public String toString(){
+        return (type);
+    }
+
+
 }
