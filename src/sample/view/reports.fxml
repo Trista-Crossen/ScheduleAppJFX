@@ -44,7 +44,7 @@
       <Label layoutX="34.0" layoutY="84.0" text="Month:" />
       <Label layoutX="36.0" layoutY="129.0" text="Type:" />
       <Label layoutX="21.0" layoutY="296.0" text="Contact:" />
-      <TextArea fx:id="thirdReportTextBox" disable="true" editable="false" layoutX="258.0" layoutY="477.0" prefHeight="153.0" prefWidth="595.0" text="Choose a customer to see how much time they spend in appointments." />
+      <TextArea fx:id="thirdReportTextBox" disable="true" editable="false" layoutX="258.0" layoutY="477.0" prefHeight="153.0" prefWidth="595.0" text="Choose a customer to see how many appointments they have scheduled." />
       <Button fx:id="firstReportButton" layoutX="142.0" layoutY="174.0" mnemonicParsing="false" onAction="#printFirstReportOnClick" text="View Report" />
       <Button fx:id="secondReportButton" layoutX="151.0" layoutY="371.0" mnemonicParsing="false" onAction="#printSecondReportOnClick" text="View Report" />
       <Button fx:id="thirdReportButton" layoutX="157.0" layoutY="594.0" mnemonicParsing="false" onAction="#printThirdReportOnClick" text="View Report" />

@@ -1,5 +1,7 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -7,7 +9,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import sample.dao.AppointmentDao;
 import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
 import sample.model.Appointment;
@@ -17,6 +21,7 @@ import sample.model.Customer;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.ResourceBundle;
 
@@ -44,6 +49,15 @@ public class ReportController implements Initializable {
         //Sets the items in their combo boxes
         contactComboBox.setItems(ContactDao.getAllContacts());
         customerComboBox.setItems(CustomerDao.getAllCustomers());
+
+        //Sets columns for table view on second report
+        appointmentIdColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        startTimeColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        endTimeColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
     }
 
     public void backToMainScreenOnClick(ActionEvent actionEvent) throws IOException {
@@ -62,8 +76,30 @@ public class ReportController implements Initializable {
     }
 
     public void printSecondReportOnClick(ActionEvent actionEvent) {
+        ObservableList<Appointment> appointmentByContact = FXCollections.observableArrayList();
+        Contact selectedContact = contactComboBox.getSelectionModel().getSelectedItem();
+        int contactId = selectedContact.getContactId();
+        for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++){
+            Appointment appointment = AppointmentDao.getAllAppointments().get(i);
+            if(appointment.getContactId() == contactId){
+                appointmentByContact.add(appointment);
+            }
+        }
+        contactAppointmentTableView.setItems(appointmentByContact);
     }
 
     public void printThirdReportOnClick(ActionEvent actionEvent) {
+        ObservableList<Appointment> appointmentByCustomer = FXCollections.observableArrayList();
+        Customer selectedCustomer = customerComboBox.getSelectionModel().getSelectedItem();
+        int customerId = selectedCustomer.getCustomerId();
+        int appointmentCount = 0;
+        for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++){
+            Appointment appointment = AppointmentDao.getAllAppointments().get(i);
+            if(appointment.getCustomerId() == customerId){
+                appointmentCount += 1;
+                appointmentByCustomer.add(appointment);
+            }
+        }
+        thirdReportTextBox.setText("Customer: " + selectedCustomer.getCustomerName() + " has " + appointmentCount + " appointments scheduled.");
     }
 }
