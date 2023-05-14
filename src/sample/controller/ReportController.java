@@ -2,6 +2,7 @@ package sample.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ResourceBundle;
 
-public class ReportController {
+public class ReportController implements Initializable {
     public Button firstReportButton;
     public Button secondReportButton;
     public Button thirdReportButton;
@@ -38,7 +39,7 @@ public class ReportController {
     public ComboBox<Appointment> typeComboBox;
     public ComboBox<Contact> contactComboBox;
 
-
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         //Sets the items in their combo boxes
         contactComboBox.setItems(ContactDao.getAllContacts());

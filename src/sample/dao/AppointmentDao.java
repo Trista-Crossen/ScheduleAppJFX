@@ -7,6 +7,7 @@ import sample.model.Appointment;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public abstract class AppointmentDao {
@@ -25,8 +26,10 @@ public abstract class AppointmentDao {
                 String location = rs.getString("Location");
                 int contactId = rs.getInt("Contact_ID");
                 String type = rs.getString("Type");
-                LocalDateTime startTime = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime endTime = rs.getTimestamp("End").toLocalDateTime();
+                Timestamp tsStart = rs.getTimestamp("Start");
+                LocalDateTime startTime = tsStart.toLocalDateTime();
+                Timestamp tsEnd = rs.getTimestamp("End");
+                LocalDateTime endTime = tsEnd.toLocalDateTime();
                 int customerId = rs.getInt("Customer_ID");
                 int userId = rs.getInt("User_ID");
 

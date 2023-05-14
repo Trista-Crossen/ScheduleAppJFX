@@ -1,5 +1,7 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -38,8 +40,8 @@ public class AddAppointmentController implements Initializable {
     public TextField descriptionTxtField;
     public TextField locationTxtField;
     public TextField typeTxtField;
-    public ComboBox startTimeComboBox;
-    public ComboBox endTimeComboBox;
+    public ComboBox<LocalTime> startTimeComboBox;
+    public ComboBox<LocalTime> endTimeComboBox;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -56,6 +58,8 @@ public class AddAppointmentController implements Initializable {
         //Getting the time set up for the time combo boxes
         startTimeComboBox.setItems(OfficeHoursOfOperation.getStartTime());
         endTimeComboBox.setItems(OfficeHoursOfOperation.getEndTime());
+
+
     }
 
     public void saveNewAppointmentOnClick(ActionEvent actionEvent) throws IOException, SQLException {
