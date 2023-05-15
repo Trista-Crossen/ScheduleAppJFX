@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import sample.dao.AppointmentDao;
 import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
+import sample.helper.Months;
 import sample.model.Appointment;
 import sample.model.Contact;
 import sample.model.Customer;
@@ -42,14 +43,14 @@ public class ReportController implements Initializable {
     public TextArea firstReportTxtBox;
     public TextArea thirdReportTextBox;
     public ComboBox<Customer> customerComboBox;
-    public ComboBox<Appointment> monthComboBox;
+    public ComboBox<Month> monthComboBox;
     public ComboBox<Appointment> typeComboBox;
     public ComboBox<Contact> contactComboBox;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         //Sets the items in their combo boxes
-        monthComboBox.setItems(AppointmentDao.getMonths());//FIXME: NEED TO GET MONTHS IN COMBO BOX SO I CAN FINISH THIS REPORT
+        monthComboBox.setItems(Months.getMonths());//FIXME: NEED TO GET MONTHS IN COMBO BOX SO I CAN FINISH THIS REPORT
         typeComboBox.setItems(AppointmentDao.getTypes());
         contactComboBox.setItems(ContactDao.getAllContacts());
         customerComboBox.setItems(CustomerDao.getAllCustomers());
@@ -79,11 +80,11 @@ public class ReportController implements Initializable {
     public void printFirstReportOnClick(ActionEvent actionEvent) {
         ObservableList<Appointment> appointmentsByTypeAndMonth = FXCollections.observableArrayList();
         int numberOfAppointments = 0;
-        Appointment selectedMonth = monthComboBox.getSelectionModel().getSelectedItem();
+        Month selectedMonth = monthComboBox.getSelectionModel().getSelectedItem();
         Appointment selectedType = typeComboBox.getSelectionModel().getSelectedItem();
         for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++){
             Appointment appointment = AppointmentDao.getAllAppointments().get(i);
-            if(appointment.getStartTime().getMonth().equals(selectedMonth) && appointment.getType().equals(selectedType)){
+            if(selectedMonth.equals(appointment.getStartTime().getMonth()) && selectedType.equals(appointment.getType())){
                 appointmentsByTypeAndMonth.add(appointment);
                 numberOfAppointments++;
             }
