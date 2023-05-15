@@ -18,16 +18,13 @@ import sample.helper.Months;
 import sample.model.Appointment;
 import sample.model.Contact;
 import sample.model.Customer;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.ResourceBundle;
 
+/**This class controls the Reports screen*/
 public class ReportController implements Initializable {
     public Button firstReportButton;
     public Button secondReportButton;
@@ -47,6 +44,9 @@ public class ReportController implements Initializable {
     public ComboBox<Appointment> typeComboBox;
     public ComboBox<Contact> contactComboBox;
 
+    /**Overridden initialize method
+     * @param resourceBundle
+     * @param url */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         //Sets the items in their combo boxes
@@ -65,6 +65,8 @@ public class ReportController implements Initializable {
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
     }
 
+    /**This method controls the button to take user back to the Records screen
+     * @param actionEvent Back button*/
     public void backToMainScreenOnClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
@@ -77,6 +79,8 @@ public class ReportController implements Initializable {
         stage.show();
     }
 
+    /**This method controls the button to print the 1st report given a month and appointment type
+     * @param actionEvent View Report button*/
     public void printFirstReportOnClick(ActionEvent actionEvent) {
         ObservableList<Appointment> appointmentsByTypeAndMonth = FXCollections.observableArrayList();
         int numberOfAppointments = 0;
@@ -94,6 +98,8 @@ public class ReportController implements Initializable {
         firstReportTxtBox.setText("The number of appointments by month:" + selectedMonth.toString() + " and type: " + selectedType.toString() + " is " + numberOfAppointments);
     }
 
+    /**This method controls the button to pull data into the table view for the 2nd report given a contact
+     * @param actionEvent View Report button*/
     public void printSecondReportOnClick(ActionEvent actionEvent) {
         ObservableList<Appointment> appointmentByContact = FXCollections.observableArrayList();
         Contact selectedContact = contactComboBox.getSelectionModel().getSelectedItem();
@@ -107,6 +113,8 @@ public class ReportController implements Initializable {
         contactAppointmentTableView.setItems(appointmentByContact);
     }
 
+    /**This method controls the button to print the 3rd report given a customer
+     * @param actionEvent View Report button*/
     public void printThirdReportOnClick(ActionEvent actionEvent) {
         ObservableList<Appointment> appointmentByCustomer = FXCollections.observableArrayList();
         Customer selectedCustomer = customerComboBox.getSelectionModel().getSelectedItem();

@@ -1,6 +1,5 @@
 package sample.controller;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,7 +19,6 @@ import sample.model.Appointment;
 import sample.model.Contact;
 import sample.model.Customer;
 import sample.model.User;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -29,8 +27,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
+/**This class controls all the components of the Update Appointment screen*/
 public class UpdateAppointmentController implements Initializable {
-
     public ComboBox<Contact> contactComboBox;
     public ComboBox<User> userComboBox;
     public ComboBox<Customer> customerComboBox;
@@ -40,13 +38,16 @@ public class UpdateAppointmentController implements Initializable {
     public TextField descriptionTxtField;
     public TextField locationTxtField;
     public TextField typeTxtField;
-    public ComboBox startTimeComboBox;
-    public ComboBox endTimeComboBox;
+    public ComboBox<LocalTime> startTimeComboBox;
+    public ComboBox<LocalTime> endTimeComboBox;
     private Appointment selectedAppointment;
     private Contact contactOfSelectedAppointment;
     private User userOfSelectedAppointment;
     private Customer customerOfSelectedAppointment;
 
+    /**This method overrides initialize for the screen
+     * @param resourceBundle
+     * @param url */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Getting Contact items into combo box
@@ -58,13 +59,13 @@ public class UpdateAppointmentController implements Initializable {
         //Getting Customer items into combo box
         customerComboBox.setItems(CustomerDao.getAllCustomers());
 
-        //FIXME: Get help with timezones. Screens come up, but formatting is weird
         //Getting time combo boxes filled
         startTimeComboBox.setItems(OfficeHoursOfOperation.getStartTime());
         endTimeComboBox.setItems(OfficeHoursOfOperation.getEndTime());
-
     }
 
+    /**This method fills the fields with appropriate information from the selected appointment
+     * @param selectedAppointment the appointment that was selected on the main screen*/
     public void setFields(Appointment selectedAppointment) {
         this.selectedAppointment = selectedAppointment;
         appointmentIdTxtField.setText(Integer.toString(selectedAppointment.getAppointmentId()));
@@ -80,7 +81,10 @@ public class UpdateAppointmentController implements Initializable {
         endTimeComboBox.setSelectionModel(selectedAppointment.getEndTime());*/
     }
 
-    public void saveUpdateOnClick(ActionEvent actionEvent) throws IOException, SQLException {
+    /**This method controls the save button
+     * @param actionEvent Save button*/
+    //FIXME: NEED TO DO EXCEPTION HANDLING
+    public void saveUpdateOnClick(ActionEvent actionEvent) throws IOException {
         String title = titleTxtField.getText();
         String description = descriptionTxtField.getText();
         String location = locationTxtField.getText();
@@ -107,6 +111,8 @@ public class UpdateAppointmentController implements Initializable {
         stage.show();
     }
 
+    /**This method controls the cancel button
+     * @param actionEvent Cancel button*/
     public void cancelOnClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
@@ -117,23 +123,5 @@ public class UpdateAppointmentController implements Initializable {
 
         stage.setScene(scene);
         stage.show();
-    }
-
-    public void onStartTimeCombo(ActionEvent actionEvent) {
-    }
-
-    public void onEndTimeCombo(ActionEvent actionEvent) {
-    }
-
-    public void onContactCombo(ActionEvent actionEvent) {
-    }
-
-    public void onUserCombo(ActionEvent actionEvent) {
-    }
-
-    public void onCustomerCombo(ActionEvent actionEvent) {
-    }
-
-    public void onDatePicker(ActionEvent actionEvent) {
     }
 }

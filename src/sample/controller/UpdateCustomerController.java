@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sample.dao.CountryDao;
@@ -18,13 +17,12 @@ import sample.dao.FirstLevelDivisionDao;
 import sample.model.Country;
 import sample.model.Customer;
 import sample.model.FirstLevelDivision;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**This class controls all the components on the Update Customer screen*/
 public class UpdateCustomerController implements Initializable {
-
     public ComboBox<Country> countryComboBox;
     public ComboBox<FirstLevelDivision> firstLevelDivisionComboBox;
     public TextField customerIdTxtField;
@@ -35,6 +33,9 @@ public class UpdateCustomerController implements Initializable {
     private Country selectedCountry;
     private Customer selectedCustomer;
 
+    /**This method overrides initialize for the screen
+     * @param url
+     * @param resourceBundle */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Setting Country items into a combo box
@@ -44,6 +45,8 @@ public class UpdateCustomerController implements Initializable {
         firstLevelDivisionComboBox.setItems(FirstLevelDivisionDao.getFirstLevelDivisions());
     }
 
+    /**This method sets the fields with appropriate information from the selected customer from the main screen
+     * @param selectedCustomer The customer that was selected on the main screen*/
     public void setFields(Customer selectedCustomer){
         this.selectedCustomer = selectedCustomer;
         customerIdTxtField.setText(Integer.toString(selectedCustomer.getCustomerId()));
@@ -66,6 +69,8 @@ public class UpdateCustomerController implements Initializable {
 
     }
 
+    /**This method controls the save button
+     * @param actionEvent Save button*/
     public void saveCustomerUpdateOnClick(ActionEvent actionEvent) throws IOException {
         //Gets data from input fields
         String customerName = customerNameTxtField.getText();
@@ -101,6 +106,8 @@ public class UpdateCustomerController implements Initializable {
         }
     }
 
+    /**This method controls the cancel button
+     * @param actionEvent Cancel button*/
     public void cancelOnClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
@@ -113,6 +120,8 @@ public class UpdateCustomerController implements Initializable {
         stage.show();
     }
 
+    /**This method controls the select country button
+     * @param actionEvent Select button*/
     public void selectCountryOnClick(ActionEvent actionEvent) {
         //Gets the selected country id to fill the first level division box
         selectedCountry = countryComboBox.getSelectionModel().getSelectedItem();

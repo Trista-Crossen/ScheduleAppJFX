@@ -1,7 +1,5 @@
 package sample.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,18 +18,16 @@ import sample.helper.OfficeHoursOfOperation;
 import sample.model.Contact;
 import sample.model.Customer;
 import sample.model.User;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
+/**This class controls all the components of the Add Appointment screen of the application*/
 public class AddAppointmentController implements Initializable {
-
     public ComboBox<Contact> contactComboBox;
     public ComboBox<User> userComboBox;
     public ComboBox<Customer> customerComboBox;
@@ -43,6 +39,9 @@ public class AddAppointmentController implements Initializable {
     public ComboBox<LocalTime> startTimeComboBox;
     public ComboBox<LocalTime> endTimeComboBox;
 
+    /**This method overrides initialize for the screen
+     * @param resourceBundle
+     * @param url */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Getting Contact items into combo box
@@ -54,7 +53,6 @@ public class AddAppointmentController implements Initializable {
         //Getting Customer items into combo box
         customerComboBox.setItems(CustomerDao.getAllCustomers());
 
-        //FIXME: Get help with timezones. Screens come up, but formatting is weird
         //Getting the time set up for the time combo boxes
         startTimeComboBox.setItems(OfficeHoursOfOperation.getStartTime());
         endTimeComboBox.setItems(OfficeHoursOfOperation.getEndTime());
@@ -62,7 +60,9 @@ public class AddAppointmentController implements Initializable {
 
     }
 
-    public void saveNewAppointmentOnClick(ActionEvent actionEvent) throws IOException, SQLException {
+    /**This method controls the save appointment button on the screen
+     * @param actionEvent Save button*/
+    public void saveNewAppointmentOnClick(ActionEvent actionEvent) throws IOException{
         //Adds new appointment to records
         String title = titleTxtField.getText();
         String description = descriptionTxtField.getText();
@@ -90,6 +90,8 @@ public class AddAppointmentController implements Initializable {
         stage.show();
     }
 
+    /**This method controls the cancel button on the screen
+     * @param actionEvent Cancel button*/
     public void cancelOnClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 

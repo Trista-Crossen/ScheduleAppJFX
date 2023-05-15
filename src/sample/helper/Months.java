@@ -2,11 +2,12 @@ package sample.helper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.text.DateFormatSymbols;
 import java.time.Month;
 
+/**This class holds an Observable List of Months*/
 public abstract class Months {
+    /**This method is called when a list of Months is needed
+     * @return months*/
     public static ObservableList<Month> getMonths() {
         ObservableList<Month> months = FXCollections.observableArrayList();
         months.add(Month.JANUARY);

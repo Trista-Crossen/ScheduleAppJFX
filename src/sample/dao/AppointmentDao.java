@@ -3,14 +3,15 @@ package sample.dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.model.Appointment;
-
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
+/**This abstract class uses SQL to pull data out of the connected database to make lists for Appointment objects*/
 public abstract class AppointmentDao {
 
+    /**This method is called to return an Observable List of All Appointments
+     * @return allAppointments*/
     public static ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
         String sql = "SELECT Appointment_ID, Title, Description, Location, Contact_ID, Type, Start, End, Customer_ID, User_ID " +
@@ -42,6 +43,16 @@ public abstract class AppointmentDao {
         return allAppointments;
     }
 
+    /**This method is called to add an Appointment to the database
+     * @param title the title of the new appointment
+     * @param description the description
+     * @param location  the location
+     * @param type the type
+     * @param startTime the time the appointment starts
+     * @param endTime the time the appointment ends
+     * @param customerId the customerId associated with the appointment
+     * @param userId the userId
+     * @param contactId the contactId*/
     public static void addAppointment(String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, int customerId, int userId, int contactId) {
         String sql = "INSERT INTO client_schedule.appointments(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try{
@@ -63,6 +74,16 @@ public abstract class AppointmentDao {
         }
     }
 
+    /**This method is called to update an appointment record in the database
+     * @param title the title of the new appointment
+     * @param description the description
+     * @param location  the location
+     * @param type the type
+     * @param startTime the time the appointment starts
+     * @param endTime the time the appointment ends
+     * @param customerId the customerId associated with the appointment
+     * @param userId the userId
+     * @param contactId the contactId */
     public static void updateAppointment(int appointmentId, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, int customerId, int userId, int contactId) {
         String sql = "UPDATE client_schedule.appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         try{
@@ -84,6 +105,8 @@ public abstract class AppointmentDao {
         }
     }
 
+    /**This method is called when a user wishes to delete an appointment record from the database
+     * @param appointmentId the appointmentId associated with the appointment the user is deleting*/
     public static void deleteAppointment(int appointmentId){
         String sql = "DELETE FROM client_schedule.appointments WHERE Appointment_ID = ?";
         try {
@@ -95,6 +118,8 @@ public abstract class AppointmentDao {
         }
     }
 
+    /**This method returns an Observable List of Types from class Appointment
+     * @return types*/
     public static ObservableList<Appointment> getTypes() {
         ObservableList<Appointment> appointmentTypes = FXCollections.observableArrayList();
         String sql = "SELECT distinct Type from client_schedule.appointments";
@@ -112,20 +137,6 @@ public abstract class AppointmentDao {
             throwables.printStackTrace();
         }
         return appointmentTypes;
-    }
-
-    public static ObservableList<Appointment> getMonths() {
-        ObservableList<Appointment> appointmentMonths = FXCollections.observableArrayList();
-        for(int i = 0; i < getAllAppointments().size(); i++){
-            Appointment appointment = getAllAppointments().get(i);
-            Month appointmentMonth = appointment.getStartTime().getMonth();
-            Appointment month = new Appointment(appointmentMonth);
-            if(!month.equals(getAllAppointments().get(i).getStartTime().getMonth())){
-                appointmentMonths.add(month);
-            }
-            month.toString();
-        }
-        return appointmentMonths;
     }
 }
 

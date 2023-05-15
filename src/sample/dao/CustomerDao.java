@@ -2,15 +2,15 @@ package sample.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sample.model.Country;
 import sample.model.Customer;
-import sample.model.FirstLevelDivision;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**This class pulls customer information out of the database to be used within the application*/
 public abstract class CustomerDao {
+    /**This method returns an observable list of all customers
+     * @return customers*/
     public static ObservableList<Customer> getAllCustomers(){
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         String sql = "SELECT Customer_ID, Customer_Name, Address, Division, Country, Postal_Code, Phone\n" +
@@ -38,9 +38,14 @@ public abstract class CustomerDao {
         return customers;
     }
 
+    /**This method adds a new customer to the database
+     * @param customerName the new customer's name
+     * @param address the customer's address
+     * @param postalCode the customer's postal code
+     * @param phoneNumber the customer's phone number
+     * @param divisionId the customer's county/providence*/
     public static void addCustomer(String customerName, String address, String postalCode, String phoneNumber, int divisionId) {
         String sql = "INSERT INTO client_schedule.customers(Customer_Name, Address, Postal_Code, Phone, Division_ID) VALUES(?, ?, ?, ?, ?)";
-
         try {
             PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
             ps.setString(1, customerName);
@@ -56,9 +61,15 @@ public abstract class CustomerDao {
 
     }
 
+    /**This method updates a customer record in the database on customerId
+     * @param customerId the customer's Id that is being updated
+     * @param customerName the customer's name
+     * @param address the customer's address
+     * @param postalCode the customer's postal code
+     * @param phoneNumber the customer's phone number
+     * @param divisionId the customer's county/providence*/
     public static void updateCustomer(int customerId, String customerName,String address, String postalCode, String phoneNumber, int divisionId ){
         String sql = "UPDATE client_schedule.customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
-
         try {
             PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
             ps.setString(1, customerName);
@@ -74,34 +85,17 @@ public abstract class CustomerDao {
         catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
     }
 
+    /**This method deletes a customer record based on customerId
+     * @param customerId the customer's Id*/
     public static void deleteCustomer(int customerId){
         String sql = "DELETE FROM client_schedule.customers WHERE Customer_ID = ?";
-
         try {
             PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
             ps.setInt(1, customerId);
-
             ps.executeUpdate();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-    }
-
-    public static void selectCustomerIdAndName() throws SQLException {
-        String sql = "SELECT Customer_ID, Customer_Name FROM client_schedule.customers";
-        try {
-            PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery(sql);
-
-            while (rs.next()) {
-                int customerId = rs.getInt("Customer_ID");
-                String customerName = rs.getString("Customer_Name");
-            }
-        }catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }

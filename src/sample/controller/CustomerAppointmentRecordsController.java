@@ -15,18 +15,15 @@ import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
 import sample.model.Appointment;
 import sample.model.Customer;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**This class controls the components of the Records Screen of the application*/
 public class CustomerAppointmentRecordsController implements Initializable {
-
     public TableView<Customer> allCustomersView;
     public TableColumn<Customer, Integer> customerIdCol;
     public TableColumn<Customer, String> customerNameCol;
@@ -55,6 +52,9 @@ public class CustomerAppointmentRecordsController implements Initializable {
     public RadioButton thisMonthRBtn;
     public RadioButton allAppointmentsRBtn;
 
+    /**This method overrides initialize to set the table views
+     * @param url
+     * @param resourceBundle */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Sets up columns for Customer Table View
@@ -68,7 +68,6 @@ public class CustomerAppointmentRecordsController implements Initializable {
 
         //Calls method to populate customer table view
         allCustomersView.setItems(CustomerDao.getAllCustomers());
-
 
         //Sets up columns for Appointment Table View
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
@@ -84,9 +83,10 @@ public class CustomerAppointmentRecordsController implements Initializable {
 
         //Calls method to populate appointment table view
         allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
-
     }
 
+    /**This method controls the Add Customer button on the screen
+     * @param actionEvent Add Customer button*/
     public void addCustomerOnClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/add-customer.fxml"));
 
@@ -99,7 +99,10 @@ public class CustomerAppointmentRecordsController implements Initializable {
         stage.show();
     }
 
+    /**This method controls the update customer button
+     * @param actionEvent Update Customer button*/
     public void updateCustomerOnClick(ActionEvent actionEvent) throws IOException {
+        //Lets user know if no customer record was selected
         if(allCustomersView.getSelectionModel().isEmpty()){
             Alert noCustomerSelectedError = new Alert(Alert.AlertType.ERROR);
             noCustomerSelectedError.setTitle("Error!");
@@ -107,6 +110,7 @@ public class CustomerAppointmentRecordsController implements Initializable {
             noCustomerSelectedError.setContentText("No customer was selected. Please select a customer and try again.");
             noCustomerSelectedError.showAndWait();
         }
+        //Goes to the update customer screen and loads that customers information into their appropriate fields
         else{
             //Gets customer data from selected customer
             selectedCustomer = allCustomersView.getSelectionModel().getSelectedItem();
@@ -128,6 +132,8 @@ public class CustomerAppointmentRecordsController implements Initializable {
         }
     }
 
+    /**This method controls the delete customer button on the screen
+     * @param actionEvent Delete Customer button*/
     public void deleteCustomerOnClick(ActionEvent actionEvent) {
         //Gives error that no Customer is selected
         if(allCustomersView.getSelectionModel().isEmpty()){
@@ -185,8 +191,12 @@ public class CustomerAppointmentRecordsController implements Initializable {
                 customerIdTiedToAppointmentError.showAndWait();
             }
         }
+        //Updates the customers table view
+        allCustomersView.setItems(CustomerDao.getAllCustomers());
     }
 
+    /**This method controls the add appointment button on the screen
+     * @param actionEvent Add Appointment button*/
     public void addAppointmentOnClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/add-appointment.fxml"));
 
@@ -199,7 +209,10 @@ public class CustomerAppointmentRecordsController implements Initializable {
         stage.show();
     }
 
+    /**This method controls the update appointment button on the screen
+     * @param actionEvent Update Appointment button*/
     public void updateAppointmentOnClick(ActionEvent actionEvent) throws IOException {
+        //Lets user know they didn't select an appointment
         if(allAppointmentsView.getSelectionModel().isEmpty()) {
             Alert noAppointmentSelectedError = new Alert(Alert.AlertType.ERROR);
             noAppointmentSelectedError.setTitle("Error!");
@@ -228,6 +241,8 @@ public class CustomerAppointmentRecordsController implements Initializable {
         }
     }
 
+    /**This method controls the delete appointment button on the screen
+     * @param actionEvent Delete Appointment button*/
     public void deleteAppointmentOnClick(ActionEvent actionEvent) throws SQLException {
         //Gives error that no appointment is selected
         if(allAppointmentsView.getSelectionModel().isEmpty()){
@@ -265,8 +280,12 @@ public class CustomerAppointmentRecordsController implements Initializable {
         }
         //Clears item selection after delete is complete
         allAppointmentsView.getSelectionModel().clearSelection();
+        //Updates tableview
+        allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
     }
 
+    /**This method controls the reports button on the screen
+     * @param actionEvent View Reports button*/
     public void reportsOnClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/reports.fxml"));
 
@@ -279,6 +298,8 @@ public class CustomerAppointmentRecordsController implements Initializable {
         stage.show();
     }
 
+    /**This method controls the week radio button
+     * @param actionEvent This Week radio button*/
     public void onThisWeekSelect(ActionEvent actionEvent) {
         allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
         ObservableList<Appointment> thisWeeksAppointments = FXCollections.observableArrayList();
@@ -292,6 +313,8 @@ public class CustomerAppointmentRecordsController implements Initializable {
         allAppointmentsView.setItems(thisWeeksAppointments);
     }
 
+    /**This method controls the month radio button
+     * @param actionEvent This Month radio button*/
     public void onThisMonthSelect(ActionEvent actionEvent) {
         allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
         ObservableList<Appointment> thisMonthsAppointments = FXCollections.observableArrayList();
@@ -305,6 +328,8 @@ public class CustomerAppointmentRecordsController implements Initializable {
         allAppointmentsView.setItems(thisMonthsAppointments);
     }
 
+    /**This method controls the all appointments radio button
+     * @param actionEvent All Appointments radio button*/
     public void onAllAppointmentsSelect(ActionEvent actionEvent) {
         allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
     }

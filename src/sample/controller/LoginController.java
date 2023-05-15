@@ -1,28 +1,22 @@
 package sample.controller;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import sample.dao.DBConnection;
 import sample.dao.UserDao;
 import sample.model.User;
-
 import java.io.IOException;
 import java.net.URL;
-import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
+/**This class controls the components of the Login screen of the application*/
 public class LoginController implements Initializable {
-
     public PasswordField passwordTextField;
     public TextField userNameTextField;
     public Label userNameLabel;
@@ -31,6 +25,7 @@ public class LoginController implements Initializable {
     public Button enterButton;
     public Label zoneIdLabel;
 
+    /**This method overrides initialize for the screen to perform language based functions*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try{
@@ -48,6 +43,8 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**This method controls the Enter button
+     * @param actionEvent Enter button*/
     public void enterSchedulingAppOnClick(ActionEvent actionEvent) throws IOException {
         ObservableList<User> userLogin;
         userLogin = UserDao.getUserInfo();
@@ -67,6 +64,7 @@ public class LoginController implements Initializable {
                 stage.show();
                 break;
             }
+            //Lets user know they entered incorrect login information
             else if(!userNameTextField.getText().equals(userLoginInfo.getUserName()) || !passwordTextField.getText().equals(userLoginInfo.getPassword())){
                 Alert incorrectLoginInfoAlert = new Alert(Alert.AlertType.ERROR);
                 incorrectLoginInfoAlert.setTitle("Incorrect log-in information was entered");

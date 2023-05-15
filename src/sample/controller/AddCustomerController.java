@@ -1,7 +1,5 @@
 package sample.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,13 +16,12 @@ import sample.dao.CustomerDao;
 import sample.dao.FirstLevelDivisionDao;
 import sample.model.Country;
 import sample.model.FirstLevelDivision;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**This class controls all the components on the Add Customer screen*/
 public class AddCustomerController implements Initializable {
-
     public ComboBox<Country> countryComboBox;
     public ComboBox<FirstLevelDivision> firstLevelDivisionComboBox;
     public TextField customerNameTxtField;
@@ -34,12 +31,17 @@ public class AddCustomerController implements Initializable {
     public Button countryOkButton;
     public Country selectedCountry;
 
+    /**This method overrides initialize on the screen
+     * @param url
+     * @param resourceBundle */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Setting Country items into a combo box
         countryComboBox.setItems(CountryDao.getAllCountries());
     }
 
+    /**This method controls the save button
+     * @param actionEvent Save button*/
     public void saveNewCustomerOnClick(ActionEvent actionEvent) throws IOException {
         //Adds new customer to records
         String customerName = customerNameTxtField.getText();
@@ -74,6 +76,8 @@ public class AddCustomerController implements Initializable {
         }
     }
 
+    /**This method controls the cancel button
+     * @param actionEvent Cancel button*/
     public void cancelOnClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
@@ -86,6 +90,8 @@ public class AddCustomerController implements Initializable {
         stage.show();
     }
 
+    /**This method gets FirstLevelDivisions based on countryId
+     * @param actionEvent Select button*/
     public void selectCountryOnClick(ActionEvent actionEvent) {
         //Gets the selected country id to fill the first level division box
        selectedCountry = countryComboBox.getSelectionModel().getSelectedItem();

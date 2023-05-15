@@ -2,8 +2,8 @@ package sample.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
+/**This class controls the connection to the database used in the application*/
 public abstract class DBConnection {
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
@@ -15,6 +15,7 @@ public abstract class DBConnection {
     private static String password = "Passw0rd!"; // Password
     public static Connection connection;  // Connection Interface
 
+    /**This method opens the database connection*/
     public static void openConnection()
     {
         try {
@@ -28,6 +29,7 @@ public abstract class DBConnection {
         }
     }
 
+    /**This method closes the database connection*/
     public static void closeConnection() {
         try {
             connection.close();
