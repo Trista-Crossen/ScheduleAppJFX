@@ -50,7 +50,7 @@ public class ReportController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         //Sets the items in their combo boxes
-        monthComboBox.setItems(Months.getMonths());//FIXME: NEED TO GET MONTHS IN COMBO BOX SO I CAN FINISH THIS REPORT
+        monthComboBox.setItems(Months.getMonths());
         typeComboBox.setItems(AppointmentDao.getTypes());
         contactComboBox.setItems(ContactDao.getAllContacts());
         customerComboBox.setItems(CustomerDao.getAllCustomers());
@@ -84,7 +84,9 @@ public class ReportController implements Initializable {
         Appointment selectedType = typeComboBox.getSelectionModel().getSelectedItem();
         for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++){
             Appointment appointment = AppointmentDao.getAllAppointments().get(i);
-            if(selectedMonth.equals(appointment.getStartTime().getMonth()) && selectedType.equals(appointment.getType())){
+            Month month = appointment.getStartTime().getMonth();
+            String type = appointment.getType();
+            if(selectedMonth.equals(month) && selectedType.toString().equals(type)){
                 appointmentsByTypeAndMonth.add(appointment);
                 numberOfAppointments++;
             }
