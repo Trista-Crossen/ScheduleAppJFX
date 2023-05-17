@@ -3,7 +3,7 @@ package sample.model;
 import javafx.scene.control.SingleSelectionModel;
 
 /**This class creates Customer objects to be used within the application*/
-public class Customer {
+public class Customer extends SingleSelectionModel<Country> {
     private int customerId;
     private String customerName;
     private String address;
@@ -121,4 +121,13 @@ public class Customer {
         return (customerName);
     }
 
+    @Override
+    protected Country getModelItem(int i) {
+        return null;
+    }
+
+    @Override
+    protected int getItemCount() {
+        return 0;
+    }
 }

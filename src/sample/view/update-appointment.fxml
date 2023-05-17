@@ -14,10 +14,10 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#cef8ec" height="480.0" layoutX="34.0" layoutY="49.0" stroke="BLACK" strokeType="INSIDE" width="736.0" />
       <Button fx:id="saveAppointmentUpdateButton" layoutX="475.0" layoutY="559.0" mnemonicParsing="false" onAction="#saveUpdateOnClick" text="Save" />
       <Button fx:id="cancelButton" layoutX="608.0" layoutY="559.0" mnemonicParsing="false" onAction="#cancelOnClick" text="Cancel" />
-      <ComboBox fx:id="contactComboBox" layoutX="559.0" layoutY="98.0" onAction="#onContactCombo" prefWidth="150.0" />
-      <ComboBox fx:id="userComboBox" layoutX="559.0" layoutY="171.0" onAction="#onUserCombo" prefWidth="150.0" />
-      <ComboBox fx:id="customerComboBox" layoutX="559.0" layoutY="238.0" onAction="#onCustomerCombo" prefWidth="150.0" />
-      <DatePicker fx:id="datePicker" layoutX="125.0" layoutY="442.0" onAction="#onDatePicker" />
+      <ComboBox fx:id="contactComboBox" layoutX="559.0" layoutY="98.0" prefWidth="150.0" />
+      <ComboBox fx:id="userComboBox" layoutX="559.0" layoutY="171.0" prefWidth="150.0" />
+      <ComboBox fx:id="customerComboBox" layoutX="559.0" layoutY="238.0" prefWidth="150.0" />
+      <DatePicker fx:id="datePicker" layoutX="125.0" layoutY="442.0" />
       <Label layoutX="20.0" layoutY="14.0" text="Update Appointment">
          <font>
             <Font size="18.0" />
@@ -39,7 +39,7 @@
       <Label disable="true" layoutX="102.0" layoutY="102.0" text="ID:" />
       <Label layoutX="331.0" layoutY="446.0" text="Start Time:" />
       <Label layoutX="334.0" layoutY="485.0" text="End Time:" />
-      <ComboBox fx:id="startTimeComboBox" layoutX="414.0" layoutY="442.0" onAction="#onStartTimeCombo" prefWidth="150.0" />
-      <ComboBox fx:id="endTimeComboBox" layoutX="414.0" layoutY="481.0" onAction="#onEndTimeCombo" prefWidth="150.0" />
+      <ComboBox fx:id="startTimeComboBox" layoutX="414.0" layoutY="442.0" prefWidth="150.0" />
+      <ComboBox fx:id="endTimeComboBox" layoutX="414.0" layoutY="481.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

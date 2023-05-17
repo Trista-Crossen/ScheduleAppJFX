@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -20,11 +21,9 @@ import sample.model.Customer;
 import sample.model.User;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /**This class controls all the components of the Add Appointment screen of the application*/
 public class AddAppointmentController implements Initializable {
@@ -72,22 +71,41 @@ public class AddAppointmentController implements Initializable {
         int userId = userComboBox.getSelectionModel().getSelectedItem().getUserId();
         int customerId = customerComboBox.getSelectionModel().getSelectedItem().getCustomerId();
         LocalDate date = datePicker.getValue();
+        ZoneId localZoneId = ZoneId.of(TimeZone.getDefault().getID());
+        ZoneId gmtZoneId = ZoneId.of("GMT");
         LocalTime startTime = startTimeComboBox.getSelectionModel().getSelectedItem();
+        ZonedDateTime localStartTime = ZonedDateTime.of(date, startTime, localZoneId);
+        Instant localStartToGMTInstant = localStartTime.toInstant();
+        ZonedDateTime gmtStartTimeZDT = localStartToGMTInstant.atZone(gmtZoneId);
+        LocalDateTime gmtStartTime = gmtStartTimeZDT.toLocalDateTime();
         LocalTime endTime = endTimeComboBox.getSelectionModel().getSelectedItem();
-        LocalDateTime start = date.atTime(startTime);
-        LocalDateTime end = date.atTime(endTime);
+        ZonedDateTime localEndTime = ZonedDateTime.of(date, endTime, localZoneId);
+        Instant localEndToGMTInstant = localEndTime.toInstant();
+        ZonedDateTime gmtEndTimeZDT = localEndToGMTInstant.atZone(gmtZoneId);
+        LocalDateTime gmtEndTime = gmtEndTimeZDT.toLocalDateTime();
 
-        AppointmentDao.addAppointment(title, description, location, type, start, end, contactId, userId, customerId);
+        //Checks if any fields are left empty by user
+        if(title.isBlank() || description.isBlank() || location.isBlank() || type.isBlank() || contactComboBox.getSelectionModel().isEmpty() || userComboBox.getSelectionModel().isEmpty() || customerComboBox.getSelectionModel().isEmpty() || startTimeComboBox.getSelectionModel().isEmpty() || endTimeComboBox.getSelectionModel().isEmpty() || datePicker.getValue() == null){
+            Alert fieldLeftEmptyError = new Alert(Alert.AlertType.ERROR);
+            fieldLeftEmptyError.setTitle("One or more fields left empty");
+            fieldLeftEmptyError.setContentText("Please be sure that all text fields in the form have information entered into them before trying to save Appointment again.");
+            fieldLeftEmptyError.showAndWait();
+            return;
+        }
+        //Saves the new Appointment to records if it passes all exception handling
+        else{
+            AppointmentDao.addAppointment(title, description, location, type, gmtStartTime, gmtEndTime, contactId, userId, customerId);
 
-        Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        Scene scene = new Scene(root, 896, 674);
-        stage.setTitle("Customer and Appointment Records");
+            Scene scene = new Scene(root, 896, 674);
+            stage.setTitle("Customer and Appointment Records");
 
-        stage.setScene(scene);
-        stage.show();
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     /**This method controls the cancel button on the screen

@@ -41,8 +41,6 @@ public class UpdateCustomerController implements Initializable {
         //Setting Country items into a combo box
         countryComboBox.setItems(CountryDao.getAllCountries());
 
-        //Setting FirstLevelDivision items into a combo box
-        firstLevelDivisionComboBox.setItems(FirstLevelDivisionDao.getFirstLevelDivisions());
     }
 
     /**This method sets the fields with appropriate information from the selected customer from the main screen
@@ -54,14 +52,17 @@ public class UpdateCustomerController implements Initializable {
         addressTxtField.setText(selectedCustomer.getAddress());
         postalCodeTxtField.setText(selectedCustomer.getPostalCode());
         phoneNumberTxtField.setText(selectedCustomer.getPhoneNumber());
-        //FIXME: Need help figuring out how to populate the combo boxes with Customer information
-        ObservableList<Country> countries = CountryDao.getAllCountries();
-        ObservableList<FirstLevelDivision> firstLevelDivisions = FirstLevelDivisionDao.getFirstLevelDivisions();
-        String selectedCustomerFLD;
-        for(int i = 0; i < countries.size(); i++) {
-            Country country = countries.get(i);
-            if(country.equals(selectedCustomer.getCountry())){
-                countryComboBox.setSelectionModel(selectedCustomer);
+
+        for(Country country : countryComboBox.getItems()) {
+            if(country.getCountryName().equals(selectedCustomer.getCountry())){
+                countryComboBox.setValue(country);
+                firstLevelDivisionComboBox.setItems(FirstLevelDivisionDao.getFirstLevelDivisions(country.getCountryId()));
+            }
+        }
+
+        for(FirstLevelDivision fld : firstLevelDivisionComboBox.getItems()){
+            if(fld.getDivisionName().equals(selectedCustomer.getFirstLevelDivision())){
+                firstLevelDivisionComboBox.setValue(fld);
             }
         }
         //firstLevelDivisionComboBox.setSelectionModel(selectedCustomer);
@@ -79,7 +80,7 @@ public class UpdateCustomerController implements Initializable {
         String phoneNumber = phoneNumberTxtField.getText();
         firstLevelDivisionComboBox.getSelectionModel().getSelectedItem();
 
-        if(customerName.isBlank() || address.isBlank() || postalCode.isBlank() || phoneNumber.isBlank() || firstLevelDivisionComboBox.getSelectionModel().isEmpty()){
+        if(customerName.isBlank() || address.isBlank() || postalCode.isBlank() || phoneNumber.isBlank()){
             //Dialog box to let user know that fields were left empty
             Alert blankFieldsError = new Alert(Alert.AlertType.ERROR);
             blankFieldsError.setTitle("Error!");

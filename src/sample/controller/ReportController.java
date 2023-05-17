@@ -82,16 +82,14 @@ public class ReportController implements Initializable {
     /**This method controls the button to print the 1st report given a month and appointment type
      * @param actionEvent View Report button*/
     public void printFirstReportOnClick(ActionEvent actionEvent) {
-        ObservableList<Appointment> appointmentsByTypeAndMonth = FXCollections.observableArrayList();
         int numberOfAppointments = 0;
         Month selectedMonth = monthComboBox.getSelectionModel().getSelectedItem();
         Appointment selectedType = typeComboBox.getSelectionModel().getSelectedItem();
-        for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++){
+        for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++) {
             Appointment appointment = AppointmentDao.getAllAppointments().get(i);
             Month month = appointment.getStartTime().getMonth();
             String type = appointment.getType();
-            if(selectedMonth.equals(month) && selectedType.toString().equals(type)){
-                appointmentsByTypeAndMonth.add(appointment);
+            if (selectedMonth.equals(month) && selectedType.toString().equals(type)) {
                 numberOfAppointments++;
             }
         }

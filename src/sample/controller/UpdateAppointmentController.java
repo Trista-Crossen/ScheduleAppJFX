@@ -1,11 +1,13 @@
 package sample.controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -21,11 +23,9 @@ import sample.model.Customer;
 import sample.model.User;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /**This class controls all the components of the Update Appointment screen*/
 public class UpdateAppointmentController implements Initializable {
@@ -41,9 +41,6 @@ public class UpdateAppointmentController implements Initializable {
     public ComboBox<LocalTime> startTimeComboBox;
     public ComboBox<LocalTime> endTimeComboBox;
     private Appointment selectedAppointment;
-    private Contact contactOfSelectedAppointment;
-    private User userOfSelectedAppointment;
-    private Customer customerOfSelectedAppointment;
 
     /**This method overrides initialize for the screen
      * @param resourceBundle
@@ -73,12 +70,36 @@ public class UpdateAppointmentController implements Initializable {
         descriptionTxtField.setText(selectedAppointment.getDescription());
         locationTxtField.setText(selectedAppointment.getLocation());
         typeTxtField.setText(selectedAppointment.getType());
-        //FIXME: Need help getting combo boxes and data picker filled with appointment data
-        /*contactComboBox.setSelectionModel(selectedAppointment.getContactId());
-        userComboBox.setSelectionModel(selectedAppointment.getUserId());
-        customerComboBox.setSelectionModel(selectedAppointment.getCustomerId());
-        startTimeComboBox.setSelectionModel(selectedAppointment.getStartTime());
-        endTimeComboBox.setSelectionModel(selectedAppointment.getEndTime());*/
+        for(Contact contact : contactComboBox.getItems()){
+            if(contact.getContactId() == selectedAppointment.getContactId()){
+                contactComboBox.setValue(contact);
+            }
+        }
+        for(User user : userComboBox.getItems()){
+            if(user.getUserId() == selectedAppointment.getUserId()){
+                userComboBox.setValue(user);
+            }
+        }
+        for(Customer customer : customerComboBox.getItems()){
+            if(customer.getCustomerId() == selectedAppointment.getCustomerId()){
+                customerComboBox.setValue(customer);
+            }
+        }
+        datePicker.setValue(selectedAppointment.getStartTime().toLocalDate());
+        ObservableList<LocalTime> officeStartHours = OfficeHoursOfOperation.getStartTime();
+        for(int i = 0; i < officeStartHours.size(); i++){
+            LocalTime startTime = officeStartHours.get(i);
+            if(startTime.equals(selectedAppointment.getStartTime().toLocalTime())){
+                startTimeComboBox.setValue(startTime);
+            }
+        }
+        ObservableList<LocalTime> officeEndHours = OfficeHoursOfOperation.getEndTime();
+        for(int i = 0; i < officeEndHours.size(); i++) {
+            LocalTime endTime = officeEndHours.get(i);
+            if(endTime.equals(selectedAppointment.getEndTime().toLocalTime())){
+                endTimeComboBox.setValue(endTime);
+            }
+        }
     }
 
     /**This method controls the save button
@@ -93,22 +114,41 @@ public class UpdateAppointmentController implements Initializable {
         userComboBox.getSelectionModel().getSelectedItem();
         customerComboBox.getSelectionModel().getSelectedItem();
         LocalDate date = datePicker.getValue();
-        LocalTime startTime = (LocalTime) startTimeComboBox.getSelectionModel().getSelectedItem();
-        LocalTime endTime = (LocalTime) endTimeComboBox.getSelectionModel().getSelectedItem();
-        LocalDateTime start = date.atTime(startTime);
-        LocalDateTime end = date.atTime(endTime);
+        ZoneId localZoneId = ZoneId.of(TimeZone.getDefault().getID());
+        ZoneId gmtZoneId = ZoneId.of("GMT");
+        LocalTime startTime = startTimeComboBox.getSelectionModel().getSelectedItem();
+        ZonedDateTime localStartTime = ZonedDateTime.of(date, startTime, localZoneId);
+        Instant localStartToGMTInstant = localStartTime.toInstant();
+        ZonedDateTime gmtStartTimeZDT = localStartToGMTInstant.atZone(gmtZoneId);
+        LocalDateTime gmtStartTime = gmtStartTimeZDT.toLocalDateTime();
+        LocalTime endTime = endTimeComboBox.getSelectionModel().getSelectedItem();
+        ZonedDateTime localEndTime = ZonedDateTime.of(date, endTime, localZoneId);
+        Instant localEndToGMTInstant = localEndTime.toInstant();
+        ZonedDateTime gmtEndTimeZDT = localEndToGMTInstant.atZone(gmtZoneId);
+        LocalDateTime gmtEndTime = gmtEndTimeZDT.toLocalDateTime();
 
-        AppointmentDao.updateAppointment(selectedAppointment.getAppointmentId(), title, description, location, type, start, end, customerComboBox.getSelectionModel().getSelectedItem().getCustomerId(), userComboBox.getSelectionModel().getSelectedItem().getUserId(), contactComboBox.getSelectionModel().getSelectedItem().getContactId());
+        //Checks if any fields are left empty by user
+        if(title.isBlank() || description.isBlank() || location.isBlank() || type.isBlank()){
+            Alert fieldLeftEmptyError = new Alert(Alert.AlertType.ERROR);
+            fieldLeftEmptyError.setTitle("One or more fields left empty");
+            fieldLeftEmptyError.setContentText("Please be sure that all text fields in the form have information entered into them before trying to save Appointment again.");
+            fieldLeftEmptyError.showAndWait();
+        }
+        //Saves updated Appointment to records if it passes exception handling
+        else{
+            AppointmentDao.updateAppointment(selectedAppointment.getAppointmentId(), title, description, location, type, gmtStartTime, gmtEndTime, customerComboBox.getSelectionModel().getSelectedItem().getCustomerId(), userComboBox.getSelectionModel().getSelectedItem().getUserId(), contactComboBox.getSelectionModel().getSelectedItem().getContactId());
 
-        Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        Scene scene = new Scene(root, 896, 674);
-        stage.setTitle("Customer and Appointment Records");
+            Scene scene = new Scene(root, 896, 674);
+            stage.setTitle("Customer and Appointment Records");
 
-        stage.setScene(scene);
-        stage.show();
+            stage.setScene(scene);
+            stage.show();
+        }
+
     }
 
     /**This method controls the cancel button

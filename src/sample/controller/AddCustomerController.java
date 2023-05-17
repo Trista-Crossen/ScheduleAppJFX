@@ -50,7 +50,7 @@ public class AddCustomerController implements Initializable {
         String phoneNumber = phoneNumberTxtField.getText();
         int division = firstLevelDivisionComboBox.getSelectionModel().getSelectedItem().getDivisionId();
 
-        if(customerName.isBlank() || address.isBlank() || postalCode.isBlank() || phoneNumber.isBlank() || firstLevelDivisionComboBox.getSelectionModel().isEmpty()){
+        if(customerName.isBlank() || address.isBlank() || postalCode.isBlank() || phoneNumber.isBlank()){
             //Dialog box to let user know that fields were left empty
             Alert blankFieldsError = new Alert(Alert.AlertType.ERROR);
             blankFieldsError.setTitle("Error!");
