@@ -3,7 +3,6 @@ package sample.helper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.time.Month;
-import java.util.Arrays;
 
 /**This class holds an Observable List of Months*/
 public abstract class Months {

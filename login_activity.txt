@@ -1,0 +1,8 @@
+User name entered: tcros | Date and time of attempt:2023-05-19 13:48:05.8482915 | login successful: false
+User name entered: test | Date and time of attempt:2023-05-19 13:49:20.7927302 | login successful: true
+User name entered: test | Date and time of attempt:2023-05-19 13:52:13.5655766 | login successful: true
+User name entered: test | Date and time of attempt:2023-05-19 14:02:23.9422593 | login successful: true
+User name entered: test | Date and time of attempt:2023-05-19 14:03:20.1192319 | login successful: true
+User name entered: test | Date and time of attempt:2023-05-19 14:05:44.9786145 | login successful: true
+User name entered: test | Date and time of attempt:2023-05-19 14:08:01.1626311 | login successful: true
+User name entered: test | Date and time of attempt:2023-05-19 14:14:41.7239601 | login successful: true

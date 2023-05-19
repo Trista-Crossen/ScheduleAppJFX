@@ -14,7 +14,9 @@ import javafx.stage.Stage;
 import sample.dao.AppointmentDao;
 import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
+import sample.helper.MonthList;
 import sample.helper.Months;
+import sample.helper.ReportInterface;
 import sample.model.Appointment;
 import sample.model.Contact;
 import sample.model.Customer;
@@ -44,6 +46,9 @@ public class ReportController implements Initializable {
     public ComboBox<Month> monthComboBox;
     public ComboBox<Appointment> typeComboBox;
     public ComboBox<Contact> contactComboBox;
+    private String type;
+    private Month month;
+    private String reportText;
 
     /**Overridden initialize method
      * @param resourceBundle
@@ -86,6 +91,8 @@ public class ReportController implements Initializable {
         int numberOfAppointments = 0;
         Month selectedMonth = monthComboBox.getSelectionModel().getSelectedItem();
         Appointment selectedType = typeComboBox.getSelectionModel().getSelectedItem();
+        type = selectedType.toString();
+        month = selectedMonth;
         for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++) {
             Appointment appointment = AppointmentDao.getAllAppointments().get(i);
             Month month = appointment.getStartTime().getMonth();
@@ -94,7 +101,11 @@ public class ReportController implements Initializable {
                 numberOfAppointments++;
             }
         }
-        firstReportTxtBox.setText("The number of appointments by month:" + selectedMonth.toString() + " and type: " + selectedType.toString() + " is " + numberOfAppointments);
+        //FIXME: GET THE STRING TO PRINT OUT PROPERLY WITH HELP DURING LIS SUNDAY
+        ReportInterface printReport = (month, type) -> reportText = "The number of appointments by month: " + month + " and type: " + type + " is ";
+        printReport.monthTypeReport(month, type);
+
+        firstReportTxtBox.setText(printReport + " " + numberOfAppointments);
     }
 
     /**This method controls the button to pull data into the table view for the 2nd report given a contact
