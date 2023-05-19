@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -8,10 +9,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import sample.dao.AppointmentDao;
 import sample.dao.UserDao;
+import sample.helper.TimeInterface;
+import sample.model.Appointment;
 import sample.model.User;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -28,6 +35,11 @@ public class LoginController implements Initializable {
     public Label zoneIdLabel;
     ZoneId localZoneId = ZoneId.of(TimeZone.getDefault() .getID());
     String localZoneString = localZoneId.toString();
+    private String userName;
+    private boolean loginSuccessful;
+    private LocalTime currentTime = LocalTime.now();
+    private LocalTime startTime;
+    private long timeDifference;
 
     /**This method overrides initialize for the screen to perform language based functions*/
     @Override
@@ -56,8 +68,52 @@ public class LoginController implements Initializable {
         for(int i = 0; i < userLogin.size(); i++) {
             User userLoginInfo = userLogin.get(i);
 
-            //Opens app to main records screen if user enters correct login information
+            //Checks time of next upcoming appointment and gives appropriate message before opening app to main records screen if user enters correct login information
             if (userNameTextField.getText().equals(userLoginInfo.getUserName()) && passwordTextField.getText().equals(userLoginInfo.getPassword())) {
+                ObservableList<Appointment> upcomingAppointments = FXCollections.observableArrayList();
+
+                //Goes through appointments by userId to see upcoming appointments for that user
+                for(int j = 0; j < AppointmentDao.getAllAppointments().size(); j++){
+                    Appointment appointment = AppointmentDao.getAllAppointments().get(j);
+                    if(appointment.getUserId() == userLoginInfo.getUserId()){
+                        if(appointment.getStartTime().isAfter(LocalDateTime.now())){
+                            if(appointment.getStartTime().toLocalDate().isEqual(LocalDate.now())){
+                                upcomingAppointments.add(appointment);
+                            }
+                        }
+                    }
+                }
+
+                //Checks if upcomingAppointments is empty
+                if(upcomingAppointments.isEmpty()){
+                    Alert noUpcomingAppointments = new Alert(Alert.AlertType.INFORMATION);
+                    noUpcomingAppointments.setTitle("No upcoming appointments.");
+                    noUpcomingAppointments.setHeaderText(null);
+                    noUpcomingAppointments.setContentText("You do not have any appointments scheduled for the future.");
+                    noUpcomingAppointments.showAndWait();
+                }
+                //Checks if first upcoming appointment is within 15 minutes of now
+                else{
+                    Appointment nextAppointment = upcomingAppointments.get(0);
+                    startTime = nextAppointment.getStartTime().toLocalTime();
+
+                    TimeInterface timeDiffCheck = (currentTime, startTime) -> timeDifference;
+                    timeDiffCheck.timeCalculation(currentTime,startTime);
+                    if(timeDifference <= 15){
+                        Alert upcomingAppointmentAlert = new Alert(Alert.AlertType.INFORMATION);
+                        upcomingAppointmentAlert.setTitle("You have an appointment in" + timeDifference);
+                        upcomingAppointmentAlert.setHeaderText(null);
+                        upcomingAppointmentAlert.setContentText("Upcoming appointment id: " + nextAppointment.getAppointmentId() + " date and time: " + nextAppointment.getStartTime().toString() + ".");
+                        upcomingAppointmentAlert.showAndWait();
+                    }
+                    else{
+                        Alert noUpcomingCurrentAppointments = new Alert(Alert.AlertType.INFORMATION);
+                        noUpcomingCurrentAppointments.setTitle("No upcoming appointments.");
+                        noUpcomingCurrentAppointments.setHeaderText(null);
+                        noUpcomingCurrentAppointments.setContentText("You do not have any appointments starting within the next 15 minutes.");
+                        noUpcomingCurrentAppointments.showAndWait();
+                    }
+                }
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
                 Parent root = loader.load();

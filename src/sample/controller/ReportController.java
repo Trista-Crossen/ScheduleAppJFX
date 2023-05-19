@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**This class controls the Reports screen*/
