@@ -1,5 +1,7 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,6 +18,7 @@ import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
 import sample.dao.UserDao;
 import sample.helper.OfficeHoursOfOperation;
+import sample.model.Appointment;
 import sample.model.Contact;
 import sample.model.Customer;
 import sample.model.User;
@@ -83,7 +86,19 @@ public class AddAppointmentController implements Initializable {
         Instant localEndToGMTInstant = localEndTime.toInstant();
         ZonedDateTime gmtEndTimeZDT = localEndToGMTInstant.atZone(gmtZoneId);
         LocalDateTime gmtEndTime = gmtEndTimeZDT.toLocalDateTime();
+        LocalDateTime startDT = LocalDateTime.of(date, startTime); //LocalDateTime var for time checks
+        LocalDateTime endDT = LocalDateTime.of(date, endTime);    //LocalDateTime var for time checks
 
+        //Gets appointments by CustomerId and date into an observable list for time overlap checks
+        ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
+        for(int i = 0; i < AppointmentDao.getAllAppointments().size(); i++){
+            Appointment appointment = AppointmentDao.getAllAppointments().get(i);
+            if(appointment.getCustomerId() == customerId && date.isEqual(appointment.getStartTime().toLocalDate())){
+                customerAppointments.add(appointment);
+            }
+        }
+
+        //Exception Handling for Add Appointment
         //Checks if any fields are left empty by user
         if(title.isBlank() || description.isBlank() || location.isBlank() || type.isBlank() || contactComboBox.getSelectionModel().isEmpty() || userComboBox.getSelectionModel().isEmpty() || customerComboBox.getSelectionModel().isEmpty() || startTimeComboBox.getSelectionModel().isEmpty() || endTimeComboBox.getSelectionModel().isEmpty() || datePicker.getValue() == null){
             Alert fieldLeftEmptyError = new Alert(Alert.AlertType.ERROR);
@@ -92,9 +107,52 @@ public class AddAppointmentController implements Initializable {
             fieldLeftEmptyError.showAndWait();
             return;
         }
-        //Saves the new Appointment to records if it passes all exception handling
-        else{
-            AppointmentDao.addAppointment(title, description, location, type, gmtStartTime, gmtEndTime, contactId, userId, customerId);
+        //Checks that start time is before end time
+        else if(startDT.isEqual(endDT) || startDT.isAfter(endDT)){
+            Alert startDTEndDTError = new Alert(Alert.AlertType.ERROR);
+            startDTEndDTError.setTitle("Error!");
+            startDTEndDTError.setHeaderText(null);
+            startDTEndDTError.setContentText("Start time is set after end time. Please make sure that start time is set to before end time.");
+            startDTEndDTError.showAndWait();
+            return;
+        }
+        //Checks customerAppointment list to see if times overlap
+        else if(!customerAppointments.isEmpty()){
+            for(int i = 0; i < customerAppointments.size(); i++){
+                Appointment timeCheck = customerAppointments.get(i);
+                //FIXME: Get help with making it possible to add consecutive appointments
+                if (startDT.isEqual(timeCheck.getEndTime()) || endDT.isEqual(timeCheck.getStartTime())) {
+                    continue;
+                }
+                else if((startDT.isAfter(timeCheck.getStartTime()) || startDT.isEqual(timeCheck.getStartTime())) && startDT.isBefore(timeCheck.getEndTime())){
+                    Alert timeOverlapError = new Alert(Alert.AlertType.ERROR);
+                    timeOverlapError.setTitle("Error! Time slot not available!");
+                    timeOverlapError.setHeaderText(null);
+                    timeOverlapError.setContentText("Time slot is not available for the selected customer. Please select a different time slot and try again.");
+                    timeOverlapError.showAndWait();
+                    return;
+                }
+                else if(endDT.isAfter(timeCheck.getStartTime()) && (endDT.isBefore(timeCheck.getEndTime()) || endDT.isEqual(timeCheck.getEndTime()))){
+                    Alert timeOverlapError = new Alert(Alert.AlertType.ERROR);
+                    timeOverlapError.setTitle("Error! Time slot not available!");
+                    timeOverlapError.setHeaderText(null);
+                    timeOverlapError.setContentText("Time slot is not available for the selected customer. Please select a different time slot and try again.");
+                    timeOverlapError.showAndWait();
+                    return;
+                }
+                else if((startDT.isBefore(timeCheck.getStartTime()) || startDT.isEqual(timeCheck.getStartTime())) && (endDT.isEqual(timeCheck.getEndTime()) || endDT.isAfter(timeCheck.getEndTime()))) {
+                    Alert timeOverlapError = new Alert(Alert.AlertType.ERROR);
+                    timeOverlapError.setTitle("Error! Time slot not available!");
+                    timeOverlapError.setHeaderText(null);
+                    timeOverlapError.setContentText("Time slot is not available for the selected customer. Please select a different time slot and try again.");
+                    timeOverlapError.showAndWait();
+                    return;
+                }
+            }
+        }
+        else {
+            //Saves the new Appointment to records if it passes all exception handling
+            AppointmentDao.addAppointment(title, description, location,type,gmtStartTime, gmtEndTime, customerId, userId, contactId);
 
             Parent root = FXMLLoader.load(getClass().getResource("/sample/view/customer-appointment-records.fxml"));
 
