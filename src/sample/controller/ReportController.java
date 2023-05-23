@@ -15,7 +15,6 @@ import sample.dao.AppointmentDao;
 import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
 import sample.helper.MonthList;
-import sample.helper.Months;
 import sample.helper.ReportInterface;
 import sample.model.Appointment;
 import sample.model.Contact;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**This class controls the Reports screen*/
@@ -40,12 +38,12 @@ public class ReportController implements Initializable {
     public TableColumn<Appointment, LocalDateTime> startTimeColumn;
     public TableColumn<Appointment, LocalDateTime> endTimeColumn;
     public TableColumn<Appointment, Integer> customerIdColumn;
-    public TextArea firstReportTxtBox;
-    public TextArea thirdReportTextBox;
     public ComboBox<Customer> customerComboBox;
     public ComboBox<Month> monthComboBox;
     public ComboBox<Appointment> typeComboBox;
     public ComboBox<Contact> contactComboBox;
+    public Label firstReportLabel;
+    public Label thirdReportLabel;
     private String type;
     private Month month;
     private String reportText;
@@ -56,7 +54,7 @@ public class ReportController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         //Sets the items in their combo boxes
-        monthComboBox.setItems(Months.getMonths());
+        monthComboBox.setItems(MonthList.getMonths());
         typeComboBox.setItems(AppointmentDao.getTypes());
         contactComboBox.setItems(ContactDao.getAllContacts());
         customerComboBox.setItems(CustomerDao.getAllCustomers());
@@ -105,7 +103,7 @@ public class ReportController implements Initializable {
         ReportInterface printReport = (month, type) -> reportText = "The number of appointments by month: " + month + " and type: " + type + " is ";
         printReport.monthTypeReport(month, type);
 
-        firstReportTxtBox.setText(printReport + " " + numberOfAppointments);
+        firstReportLabel.setText(printReport + " " + numberOfAppointments);
     }
 
     /**This method controls the button to pull data into the table view for the 2nd report given a contact
@@ -137,6 +135,6 @@ public class ReportController implements Initializable {
                 appointmentByCustomer.add(appointment);
             }
         }
-        thirdReportTextBox.setText("Customer: " + selectedCustomer.getCustomerName() + " has " + appointmentCount + " appointments scheduled.");
+        thirdReportLabel.setText("Customer: " + selectedCustomer.getCustomerName() + " has " + appointmentCount + " appointments scheduled.");
     }
 }
