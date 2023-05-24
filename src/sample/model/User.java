@@ -6,7 +6,10 @@ public class User {
     private String userName;
     private String password;
 
-    /**Constructor for User objects*/
+    /**Constructor for User objects
+     * @param userId
+     * @param userName
+     * @param password */
     public User(int userId, String userName, String password) {
         this.userId = userId;
         this.userName = userName;

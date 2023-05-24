@@ -84,7 +84,9 @@ public class ReportController implements Initializable {
     }
 
     /**This method controls the button to print the 1st report given a month and appointment type
-     * @param actionEvent View Report button*/
+     * @param actionEvent View Report button
+     * I used a lambda in this method to streamline the printing of a report. The lambda takes in a month and appointment type
+     * and returns a string for the report printout. The lambda expression can be found on line 104.*/
     public void printFirstReportOnClick(ActionEvent actionEvent) {
         int numberOfAppointments = 0;
         Month selectedMonth = monthComboBox.getSelectionModel().getSelectedItem();
@@ -99,7 +101,6 @@ public class ReportController implements Initializable {
                 numberOfAppointments++;
             }
         }
-        //FIXME: GET THE STRING TO PRINT OUT PROPERLY WITH HELP DURING LIS SUNDAY
         ReportInterface printReport = (month, type) -> "The number of appointments by month: " + month + " and type: " + type + " is ";
         printReport.monthTypeReport(month, type);
         firstReportLabel.setText(printReport.monthTypeReport(month, type) + " " + numberOfAppointments);

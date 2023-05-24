@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -64,7 +65,11 @@ public class LoginController implements Initializable {
     }
 
     /**This method controls the Enter button
-     * @param actionEvent Enter button*/
+     * @param actionEvent Enter button
+     * I used a lambda in this method for time difference checks, which get the current time and check it against the next upcoming appointment based on userId.
+     * This lambda helped to streamline my code by using a functional interface named TimeInterface to compare the current time with the next appointment's
+     * starting time and returns a long that represents the number of minutes between the two values.
+     * The lambda expression can be found on line 116.*/
     public void enterSchedulingAppOnClick(ActionEvent actionEvent) throws IOException {
             userName = userNameTextField.getText();
             ObservableList<User> userLogin;
@@ -108,15 +113,14 @@ public class LoginController implements Initializable {
                         Appointment nextAppointment = upcomingAppointments.get(0);
                         startTime = nextAppointment.getStartTime().toLocalTime();
 
-                        TimeInterface timeDiffCheck = (startTime, currentTime) -> timeDifference = startTime.compareTo(currentTime);
-                        timeDiffCheck.timeCalculation(startTime, currentTime);
-                        System.out.println(timeDifference);
+                        TimeInterface timeDiffCheck = (currentTime, startTime) -> timeDifference = ChronoUnit.MINUTES.between(currentTime, startTime);
+                        timeDiffCheck.timeCalculation(currentTime, startTime);
                         if (timeDifference <= 15) {
                             try {
                                 Alert upcomingAppointmentAlert = new Alert(Alert.AlertType.INFORMATION);
                                 upcomingAppointmentAlert.setTitle(rb.getString("UpcomingAppttitle") + " " + timeDifference);
                                 upcomingAppointmentAlert.setHeaderText(null);
-                                upcomingAppointmentAlert.setContentText(rb.getString("UpcomingApptId") + " " + nextAppointment.getAppointmentId() + " " + rb.getString("UpcomingApptTime") + " " + nextAppointment.getStartTime().toString() + ".");
+                                upcomingAppointmentAlert.setContentText(rb.getString("UpcomingApptId") + " " + nextAppointment.getAppointmentId() + " " + rb.getString("UpcomingApptTime") + " " + nextAppointment.getStartTime().toString() + rb.getString("minutes") + ".");
                                 upcomingAppointmentAlert.showAndWait();
                             }
                             catch (Exception localeNotFound){

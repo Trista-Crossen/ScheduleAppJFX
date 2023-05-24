@@ -2,9 +2,9 @@ package sample.helper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.time.Month;
 
+/**This enum class holds a list of months to be used on the reports screen in a combo box*/
 public enum MonthList {
     JANUARY,
     FEBRUARY,
@@ -18,6 +18,8 @@ public enum MonthList {
     NOVEMBER,
     DECEMBER;
 
+    /**This method returns an Observable list of months.
+     * @return  months*/
     public static ObservableList<Month> getMonths(){
         ObservableList<Month> months = FXCollections.observableArrayList();
         months.add(Month.JANUARY);

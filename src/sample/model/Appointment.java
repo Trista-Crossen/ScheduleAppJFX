@@ -15,7 +15,17 @@ public class Appointment {
     private int userId;
     private int customerId;
 
-    /**Constructor for Appointment objects*/
+    /**Constructor for Appointment objects
+     * @param appointmentId
+     * @param title
+     * @param description
+     * @param location
+     * @param type
+     * @param startTime
+     * @param endTime
+     * @param contactId
+     * @param userId
+     * @param customerId */
     public Appointment(int appointmentId, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, int contactId, int userId, int customerId) {
         this.appointmentId = appointmentId;
         this.title = title;
@@ -29,7 +39,8 @@ public class Appointment {
         this.customerId = customerId;
     }
 
-    /**Constructor for Type objects*/
+    /**Constructor for Type objects
+     * @param type */
     public Appointment(String type) {
         this.type = type;
     }

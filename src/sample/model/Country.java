@@ -5,7 +5,9 @@ public class Country {
     private int countryId;
     private String countryName;
 
-    /**Constructor for country objects*/
+    /**Constructor for country objects
+     * @param countryId
+     * @param countryName */
     public Country(int countryId, String countryName) {
         this.countryId = countryId;
         this.countryName = countryName;

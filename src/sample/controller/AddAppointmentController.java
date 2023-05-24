@@ -120,7 +120,6 @@ public class AddAppointmentController implements Initializable {
         else if(!customerAppointments.isEmpty()){
             for(int i = 0; i < customerAppointments.size(); i++){
                 Appointment timeCheck = customerAppointments.get(i);
-                //FIXME: Get help with making it possible to add consecutive appointments
                 if (startDT.isEqual(timeCheck.getEndTime()) || endDT.isEqual(timeCheck.getStartTime())) {
                     continue;
                 }

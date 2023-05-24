@@ -3,11 +3,13 @@ package sample.model;
 import javafx.scene.control.SingleSelectionModel;
 
 /**This class makes Contact objects for the application*/
-public class Contact extends SingleSelectionModel<Contact> {
+public class Contact {
     private int contactId;
     private String contactName;
 
-    /**Constructor for Contact objects*/
+    /**Constructor for Contact objects
+     * @param contactId
+     * @param contactName */
     public Contact(int contactId, String contactName) {
         this.contactId = contactId;
         this.contactName = contactName;
@@ -42,15 +44,5 @@ public class Contact extends SingleSelectionModel<Contact> {
     @Override
     public String toString() {
         return (contactName);
-    }
-
-    @Override
-    protected Contact getModelItem(int i) {
-        return null;
-    }
-
-    @Override
-    protected int getItemCount() {
-        return 0;
     }
 }

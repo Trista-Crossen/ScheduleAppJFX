@@ -105,7 +105,6 @@ public class UpdateAppointmentController implements Initializable {
 
     /**This method controls the save button
      * @param actionEvent Save button*/
-    //FIXME: NEED TO DO EXCEPTION HANDLING
     public void saveUpdateOnClick(ActionEvent actionEvent) throws IOException {
         String title = titleTxtField.getText();
         String description = descriptionTxtField.getText();
@@ -185,7 +184,6 @@ public class UpdateAppointmentController implements Initializable {
                     timeOverlapError.showAndWait();
                     return;
                 }
-                //FIXME: Get help making it possible to update to consecutive appointment times
                 else if ((startDT.isEqual(timeCheck.getEndTime()) || startDT.isAfter(timeCheck.getEndTime())) &&(endDT.isEqual(timeCheck.getStartTime()) || endDT.isBefore(timeCheck.getStartTime()))) {
                     continue;
                 }

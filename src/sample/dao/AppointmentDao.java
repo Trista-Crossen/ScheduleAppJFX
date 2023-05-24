@@ -15,7 +15,7 @@ public abstract class AppointmentDao {
     public static ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
         String sql = "SELECT Appointment_ID, Title, Description, Location, Contact_ID, Type, Start, End, Customer_ID, User_ID " +
-                "FROM client_schedule.appointments";
+        "FROM client_schedule.appointments";
         try {
             PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
