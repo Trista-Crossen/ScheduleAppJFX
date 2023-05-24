@@ -34,7 +34,7 @@
       <TextField fx:id="typeTxtField" layoutX="138.0" layoutY="383.0" />
       <Label layoutX="79.0" layoutY="387.0" text="Type:" />
       <Label layoutX="65.0" layoutY="310.0" text="Location:" />
-      <Label layoutX="59.0" layoutY="242.0" text="Discription:" />
+      <Label layoutX="59.0" layoutY="242.0" text="Description:" />
       <Label layoutX="89.0" layoutY="175.0" text="Title:" />
       <Label disable="true" layoutX="102.0" layoutY="102.0" text="ID:" />
       <Label layoutX="331.0" layoutY="446.0" text="Start Time:" />
