@@ -100,10 +100,9 @@ public class ReportController implements Initializable {
             }
         }
         //FIXME: GET THE STRING TO PRINT OUT PROPERLY WITH HELP DURING LIS SUNDAY
-        ReportInterface printReport = (month, type) -> reportText = "The number of appointments by month: " + month + " and type: " + type + " is ";
+        ReportInterface printReport = (month, type) -> "The number of appointments by month: " + month + " and type: " + type + " is ";
         printReport.monthTypeReport(month, type);
-
-        firstReportLabel.setText(printReport + " " + numberOfAppointments);
+        firstReportLabel.setText(printReport.monthTypeReport(month, type) + " " + numberOfAppointments);
     }
 
     /**This method controls the button to pull data into the table view for the 2nd report given a contact

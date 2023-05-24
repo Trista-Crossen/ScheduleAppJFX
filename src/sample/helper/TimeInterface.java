@@ -8,5 +8,5 @@ public interface TimeInterface {
      * @param currentTime the time of log-in
      * @param startTime the time of the next upcoming appointment
      * @return long the time difference between currentTime and startTime*/
-    long timeCalculation(LocalTime currentTime, LocalTime startTime);
+    long timeCalculation(LocalTime startTime, LocalTime currentTime);
 }

@@ -35,8 +35,6 @@ public class LoginController implements Initializable {
     public Label titleLabel;
     public Button enterButton;
     public Label zoneIdLabel;
-    ZoneId localZoneId = ZoneId.of(TimeZone.getDefault() .getID());
-    String localZoneString = localZoneId.toString();
     private String userName;
     private boolean loginSuccessful;
     private LocalDate currentDate = LocalDate.now();
@@ -52,18 +50,14 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try{
+            ZoneId localZoneId = ZoneId.of(TimeZone.getDefault() .getID());
+            String localZoneString = localZoneId.toString();
             zoneIdLabel.setText("ZoneId is: " + localZoneString);
-
-            //Sets UI elements to French if language default is fr
-            if(Locale.getDefault().getLanguage().equals("fr")){
-                userNameLabel.setText(rb.getString("Username"));
-                passwordLabel.setText(rb.getString("Password"));
-                titleLabel.setText(rb.getString("Log-in"));
-                enterButton.setText(rb.getString("Enter"));
-                zoneIdLabel.setText(rb.getString("zoneId"));
-                zoneIdLabel.setText(rb.getString("is"));
-                zoneIdLabel.setText(rb.getString(localZoneString));
-            }
+            userNameLabel.setText(rb.getString("Username"));
+            passwordLabel.setText(rb.getString("Password"));
+            titleLabel.setText(rb.getString("Log-in"));
+            enterButton.setText(rb.getString("Enter"));
+            zoneIdLabel.setText(rb.getString("zoneId") + " " + localZoneString);
         }catch(Exception localeNotFound){
 
         }
@@ -97,94 +91,44 @@ public class LoginController implements Initializable {
 
                     //Checks if upcomingAppointments is empty
                     if (upcomingAppointments.isEmpty()) {
-                        Alert noUpcomingAppointments = new Alert(Alert.AlertType.INFORMATION);
-                        noUpcomingAppointments.setTitle("No upcoming appointments.");
-                        noUpcomingAppointments.setHeaderText(null);
-                        noUpcomingAppointments.setContentText("You do not have any appointments scheduled for today.");
-                        noUpcomingAppointments.showAndWait();
-
                         try {
-                            //changes alert to French if default language is set to fr
-                            if (Locale.getDefault().getLanguage().equals("fr")) {
-                                noUpcomingAppointments.setTitle(rb.getString("No"));
-                                noUpcomingAppointments.setTitle(rb.getString("upcoming"));
-                                noUpcomingAppointments.setTitle(rb.getString("appointments"));
-                                noUpcomingAppointments.setContentText(rb.getString("You"));
-                                noUpcomingAppointments.setContentText(rb.getString("do"));
-                                noUpcomingAppointments.setContentText(rb.getString("not"));
-                                noUpcomingAppointments.setContentText(rb.getString("have"));
-                                noUpcomingAppointments.setContentText(rb.getString("any"));
-                                noUpcomingAppointments.setContentText(rb.getString("appointments"));
-                                noUpcomingAppointments.setContentText(rb.getString("scheduled"));
-                                noUpcomingAppointments.setContentText(rb.getString("for"));
-                                noUpcomingAppointments.setContentText(rb.getString("today"));
-                            }
+                        Alert noUpcomingAppointments = new Alert(Alert.AlertType.INFORMATION);
+                        noUpcomingAppointments.setTitle(rb.getString("NoUpcomingApptstitle"));
+                        noUpcomingAppointments.setHeaderText(null);
+                        noUpcomingAppointments.setContentText(rb.getString("NoUpcomingApptsmessage"));
+                        noUpcomingAppointments.showAndWait();
                         }
-                        catch (Exception localeNotFound){
+                       catch (Exception localeNotFound){
 
                         }
                     }
+
                     //Checks if first upcoming appointment is within 15 minutes of now
                     else {
                         Appointment nextAppointment = upcomingAppointments.get(0);
                         startTime = nextAppointment.getStartTime().toLocalTime();
 
-                        TimeInterface timeDiffCheck = (currentTime, startTime) -> timeDifference = startTime.compareTo(currentTime);
+                        TimeInterface timeDiffCheck = (startTime, currentTime) -> timeDifference = startTime.compareTo(currentTime);
                         timeDiffCheck.timeCalculation(startTime, currentTime);
+                        System.out.println(timeDifference);
                         if (timeDifference <= 15) {
-                            Alert upcomingAppointmentAlert = new Alert(Alert.AlertType.INFORMATION);
-                            upcomingAppointmentAlert.setTitle("You have an appointment in" + timeDifference);
-                            upcomingAppointmentAlert.setHeaderText(null);
-                            upcomingAppointmentAlert.setContentText("Upcoming appointmentId: " + nextAppointment.getAppointmentId() + " date and time: " + nextAppointment.getStartTime().toString() + ".");
-                            upcomingAppointmentAlert.showAndWait();
-
                             try {
-                                //Changes alert to French if default language is fr
-                                if (Locale.getDefault().getLanguage().equals("fr")) {
-                                    upcomingAppointmentAlert.setTitle(rb.getString("You"));
-                                    upcomingAppointmentAlert.setTitle(rb.getString("have"));
-                                    upcomingAppointmentAlert.setTitle(rb.getString("an"));
-                                    upcomingAppointmentAlert.setTitle(rb.getString("appointment"));
-                                    upcomingAppointmentAlert.setTitle(rb.getString("in"));
-                                    upcomingAppointmentAlert.setTitle(rb.getString(String.valueOf(timeDifference)));
-                                    upcomingAppointmentAlert.setContentText(rb.getString("Upcoming"));
-                                    upcomingAppointmentAlert.setContentText(rb.getString("appointmentId"));
-                                    upcomingAppointmentAlert.setContentText(rb.getString(String.valueOf(nextAppointment.getAppointmentId())));
-                                    upcomingAppointmentAlert.setContentText(rb.getString("date"));
-                                    upcomingAppointmentAlert.setContentText(rb.getString("and"));
-                                    upcomingAppointmentAlert.setContentText(rb.getString("time"));
-                                    upcomingAppointmentAlert.setContentText(rb.getString(String.valueOf(nextAppointment.getStartTime())));
-                                }
+                                Alert upcomingAppointmentAlert = new Alert(Alert.AlertType.INFORMATION);
+                                upcomingAppointmentAlert.setTitle(rb.getString("UpcomingAppttitle") + " " + timeDifference);
+                                upcomingAppointmentAlert.setHeaderText(null);
+                                upcomingAppointmentAlert.setContentText(rb.getString("UpcomingApptId") + " " + nextAppointment.getAppointmentId() + " " + rb.getString("UpcomingApptTime") + " " + nextAppointment.getStartTime().toString() + ".");
+                                upcomingAppointmentAlert.showAndWait();
                             }
                             catch (Exception localeNotFound){
 
                             }
                         } else {
-                            Alert noUpcomingCurrentAppointments = new Alert(Alert.AlertType.INFORMATION);
-                            noUpcomingCurrentAppointments.setTitle("No upcoming appointments.");
-                            noUpcomingCurrentAppointments.setHeaderText(null);
-                            noUpcomingCurrentAppointments.setContentText("You do not have any appointments starting within the next 15 minutes.");
-                            noUpcomingCurrentAppointments.showAndWait();
-
                             try {
-                                //Changes alert to French if default language is fr
-                                if (Locale.getDefault().getLanguage().equals("fr")) {
-                                    noUpcomingCurrentAppointments.setTitle(rb.getString("No"));
-                                    noUpcomingCurrentAppointments.setTitle(rb.getString("upcoming"));
-                                    noUpcomingCurrentAppointments.setTitle(rb.getString("appointments"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("You"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("do"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("not"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("have"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("any"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("appointments"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("starting"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("within"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("the"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("next"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("15"));
-                                    noUpcomingCurrentAppointments.setContentText(rb.getString("minutes"));
-                                }
+                                Alert noUpcomingCurrentAppointments = new Alert(Alert.AlertType.INFORMATION);
+                                noUpcomingCurrentAppointments.setTitle(rb.getString("NoApptsIn15title"));
+                                noUpcomingCurrentAppointments.setHeaderText(null);
+                                noUpcomingCurrentAppointments.setContentText(rb.getString("NoApptsin15message"));
+                                noUpcomingCurrentAppointments.showAndWait();
                             }
                             catch (Exception localeNotFound){
 
@@ -208,35 +152,10 @@ public class LoginController implements Initializable {
                 else if (!userNameTextField.getText().equals(userLoginInfo.getUserName()) || !passwordTextField.getText().equals(userLoginInfo.getPassword())) {
                     loginSuccessful = false;
                     Alert incorrectLoginInfoAlert = new Alert(Alert.AlertType.ERROR);
-                    incorrectLoginInfoAlert.setTitle("Incorrect log-in information was entered");
-                    incorrectLoginInfoAlert.setContentText("Please make sure to enter a correct username and password to enter the program.");
+                    incorrectLoginInfoAlert.setTitle(rb.getString("Errortitle"));
+                    incorrectLoginInfoAlert.setContentText(rb.getString("Errormessage"));
                     incorrectLoginInfoAlert.showAndWait();
 
-                    try {
-                        //Changes alert to French if default language is fr
-                        if (Locale.getDefault().getLanguage().equals("fr")) {
-                            incorrectLoginInfoAlert.setTitle(rb.getString("Incorrect"));
-                            incorrectLoginInfoAlert.setTitle(rb.getString("log-in"));
-                            incorrectLoginInfoAlert.setTitle(rb.getString("information"));
-                            incorrectLoginInfoAlert.setTitle(rb.getString("was"));
-                            incorrectLoginInfoAlert.setTitle(rb.getString("entered"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("Please"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("make"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("sure"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("to"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("enter"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("a"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("correct"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("username"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("and"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("password"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("the"));
-                            incorrectLoginInfoAlert.setContentText(rb.getString("program"));
-                        }
-                    }
-                    catch (Exception localeNotFound){
-
-                    }
                     break;
                 }
             }
