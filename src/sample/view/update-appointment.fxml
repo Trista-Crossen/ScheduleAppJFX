@@ -4,7 +4,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -12,12 +14,12 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="612.0" prefWidth="804.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.UpdateAppointmentController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#cef8ec" height="480.0" layoutX="34.0" layoutY="49.0" stroke="BLACK" strokeType="INSIDE" width="736.0" />
-      <Button fx:id="saveAppointmentUpdateButton" layoutX="475.0" layoutY="559.0" mnemonicParsing="false" onAction="#saveUpdateOnClick" text="Save" />
+      <Button fx:id="saveNewAppointmentButton" layoutX="475.0" layoutY="559.0" mnemonicParsing="false" onAction="#saveUpdateOnClick" text="Save" />
       <Button fx:id="cancelButton" layoutX="608.0" layoutY="559.0" mnemonicParsing="false" onAction="#cancelOnClick" text="Cancel" />
-      <ComboBox fx:id="contactComboBox" layoutX="559.0" layoutY="98.0" prefWidth="150.0" />
-      <ComboBox fx:id="userComboBox" layoutX="559.0" layoutY="171.0" prefWidth="150.0" />
-      <ComboBox fx:id="customerComboBox" layoutX="559.0" layoutY="238.0" prefWidth="150.0" />
-      <DatePicker fx:id="datePicker" layoutX="125.0" layoutY="442.0" />
+      <ComboBox fx:id="contactComboBox" layoutX="559.0" layoutY="98.0" prefWidth="150.0" promptText="Pick a contact" />
+      <ComboBox fx:id="userComboBox" layoutX="559.0" layoutY="171.0" prefWidth="150.0" promptText="Pick a user" />
+      <ComboBox fx:id="customerComboBox" layoutX="559.0" layoutY="238.0" prefWidth="150.0" promptText="Pick a customer" />
+      <DatePicker fx:id="datePicker" layoutX="125.0" layoutY="442.0" promptText="Pick a day" />
       <Label layoutX="20.0" layoutY="14.0" text="Update Appointment">
          <font>
             <Font size="18.0" />
@@ -27,19 +29,25 @@
       <Label layoutX="489.0" layoutY="175.0" text="User:" />
       <Label layoutX="469.0" layoutY="242.0" text="Customer:" />
       <Label layoutX="75.0" layoutY="446.0" text="Date:" />
-      <TextField fx:id="appointmentIdTxtField" disable="true" editable="false" layoutX="138.0" layoutY="98.0" />
-      <TextField fx:id="titleTxtField" layoutX="138.0" layoutY="171.0" />
-      <TextField fx:id="descriptionTxtField" layoutX="138.0" layoutY="238.0" />
-      <TextField fx:id="locationTxtField" layoutX="138.0" layoutY="306.0" />
-      <TextField fx:id="typeTxtField" layoutX="138.0" layoutY="383.0" />
-      <Label layoutX="79.0" layoutY="387.0" text="Type:" />
-      <Label layoutX="65.0" layoutY="310.0" text="Location:" />
+      <TextField fx:id="appointmentIdTxtField" disable="true" editable="false" layoutX="138.0" layoutY="123.0" text="Appointment ID" />
+      <TextField fx:id="titleTxtField" layoutX="138.0" layoutY="171.0" promptText="Title of appointment" />
+      <TextField fx:id="descriptionTxtField" layoutX="138.0" layoutY="238.0" promptText="Short discription" />
+      <TextField fx:id="locationTxtField" layoutX="138.0" layoutY="306.0" promptText="Address" />
+      <TextField fx:id="typeTxtField" layoutX="138.0" layoutY="383.0" promptText="Optional" />
+      <Label layoutX="88.0" layoutY="85.0" text="Type:" />
+      <Label fx:id="locationLabel1" layoutX="65.0" layoutY="310.0" text="Address:" />
       <Label layoutX="59.0" layoutY="242.0" text="Description:" />
       <Label layoutX="89.0" layoutY="175.0" text="Title:" />
-      <Label disable="true" layoutX="102.0" layoutY="102.0" text="ID:" />
+      <Label disable="true" layoutX="95.0" layoutY="127.0" text="ID:" />
       <Label layoutX="331.0" layoutY="446.0" text="Start Time:" />
       <Label layoutX="334.0" layoutY="485.0" text="End Time:" />
-      <ComboBox fx:id="startTimeComboBox" layoutX="414.0" layoutY="442.0" prefWidth="150.0" />
-      <ComboBox fx:id="endTimeComboBox" layoutX="414.0" layoutY="481.0" prefWidth="150.0" />
+      <ComboBox fx:id="startTimeComboBox" layoutX="414.0" layoutY="442.0" prefWidth="150.0" promptText="Pick a start time" visibleRowCount="5" />
+      <ComboBox fx:id="endTimeComboBox" layoutX="414.0" layoutY="481.0" prefWidth="150.0" promptText="Pick a end time" visibleRowCount="5" />
+      <RadioButton fx:id="inPersonRB" layoutX="138.0" layoutY="85.0" mnemonicParsing="false" onAction="#onInPersonSelect" text="In Person" toggleGroup="$tgroup">
+         <toggleGroup>
+            <ToggleGroup fx:id="tgroup" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="virtualRB" layoutX="243.0" layoutY="85.0" mnemonicParsing="false" onAction="#onVirtualSelect" text="Virtual" toggleGroup="$tgroup" />
+      <Label fx:id="locationLabel2" layoutX="77.0" layoutY="387.0" text="Suite:" />
    </children>
 </AnchorPane>

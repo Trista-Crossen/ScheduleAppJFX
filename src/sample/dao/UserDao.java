@@ -3,9 +3,8 @@ package sample.dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.model.User;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 
 /**This class pulls user information out of the database for use within the application*/
 public abstract class UserDao {

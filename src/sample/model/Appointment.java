@@ -88,7 +88,7 @@ public class Appointment {
     }
 
     /**This method sets the location
-     *@param location sets the location */
+     * @param location */
     public void setLocation(String location) {
         this.location = location;
     }
