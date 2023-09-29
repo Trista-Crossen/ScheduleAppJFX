@@ -6,6 +6,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
@@ -68,5 +69,7 @@
             <RadioButton fx:id="allAppointmentsRBtn" mnemonicParsing="false" onAction="#onAllAppointmentsSelect" selected="true" text="All Appointments" toggleGroup="$appointmentRecordsToggleGroup" />
          </buttons>
       </ButtonBar>
+      <TextField fx:id="customerSearch" layoutX="576.0" layoutY="82.0" promptText="Search customers" />
+      <Button fx:id="searchButton" layoutX="748.0" layoutY="82.0" mnemonicParsing="false" onAction="#searchCustomersOnClick" text="Search" />
    </children>
 </AnchorPane>

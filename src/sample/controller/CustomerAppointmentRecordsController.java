@@ -51,6 +51,8 @@ public class CustomerAppointmentRecordsController implements Initializable {
     public RadioButton thisWeekRBtn;
     public RadioButton thisMonthRBtn;
     public RadioButton allAppointmentsRBtn;
+    public Button searchButton;
+    public TextField customerSearch;
 
     /**This method overrides initialize to set the table views
      * @param url
@@ -298,6 +300,28 @@ public class CustomerAppointmentRecordsController implements Initializable {
         stage.show();
     }
 
+    /**This method controls the search customers button
+     * @param actionEvent */
+    public void searchCustomersOnClick(ActionEvent actionEvent) {
+        String searchText = customerSearch.getText();
+        allCustomersView.setItems(CustomerDao.getAllCustomers());
+        ObservableList<Customer> customerSearchResults = FXCollections.observableArrayList();
+        for(int i = 0; i < allCustomersView.getItems().size(); i++){
+            Customer customer = allCustomersView.getItems().get(i);
+
+            if(customer.getCustomerName().contains(searchText)){
+                customerSearchResults.add(customer);
+            }
+        }
+        allCustomersView.setItems(customerSearchResults);
+
+        customerSearch.setText("");
+        //Gets all customers back into the table if search field is empty
+        if(customerSearch.equals("")){
+            allCustomersView.setItems(CustomerDao.getAllCustomers());
+        }
+    }
+
     /**This method controls the week radio button
      * @param actionEvent This Week radio button*/
     public void onThisWeekSelect(ActionEvent actionEvent) {
@@ -333,4 +357,5 @@ public class CustomerAppointmentRecordsController implements Initializable {
     public void onAllAppointmentsSelect(ActionEvent actionEvent) {
         allAppointmentsView.setItems(AppointmentDao.getAllAppointments());
     }
+
 }
