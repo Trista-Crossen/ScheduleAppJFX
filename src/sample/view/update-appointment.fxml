@@ -48,6 +48,6 @@
             <ToggleGroup fx:id="tgroup" />
          </toggleGroup></RadioButton>
       <RadioButton fx:id="virtualRB" layoutX="243.0" layoutY="85.0" mnemonicParsing="false" onAction="#onVirtualSelect" text="Virtual" toggleGroup="$tgroup" />
-      <Label fx:id="locationLabel2" layoutX="77.0" layoutY="387.0" text="Suite:" />
+      <Label fx:id="locationLabel2" layoutX="65.0" layoutY="387.0" text="Suite:" />
    </children>
 </AnchorPane>

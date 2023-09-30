@@ -78,6 +78,8 @@ public class UpdateAppointmentController implements Initializable {
             inPersonRB.setSelected(true);
         } else if (selectedAppointment.getType().equals("Virtual")) {
             virtualRB.setSelected(true);
+            locationLabel1.setText("Link:");
+            locationLabel2.setText("Room Name:");
         }
         titleTxtField.setText(selectedAppointment.getTitle());
         descriptionTxtField.setText(selectedAppointment.getDescription());
@@ -373,13 +375,11 @@ public class UpdateAppointmentController implements Initializable {
     public void onInPersonSelect (ActionEvent actionEvent){
         locationLabel1.setText("Address:");
         locationLabel2.setText("Suite:");
-        locationTxtField.setPromptText("Address");
     }
 
     public void onVirtualSelect (ActionEvent actionEvent){
         locationLabel1.setText("Link:");
         locationLabel2.setText("Room Name:");
-        locationTxtField.setPromptText("Meeting room link");
     }
 
     public static boolean isValidURL (String meetingRoomLinkString){
